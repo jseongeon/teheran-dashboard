@@ -725,19 +725,20 @@ export function DetailedMediaPage({ subPage, inquiries, contracts, isDarkMode }:
             </div>
           </div>
 
-          {/* 추가 설명 */}
-          <div className="mt-6 p-4 bg-muted rounded-lg">
-            <h4 className="font-semibold mb-2">📋 문의건 카운트 로직</h4>
-            <ul className="space-y-1 text-sm text-muted-foreground">
-              <li>• <strong>완전 제외:</strong> E열 = "AI응대", "문의건X", "특허관리팀전달" → 카운트 안 함</li>
-              <li>• <strong>중복 제거:</strong> E열 = "리마인드CRM", "연락처중복" → 같은 달 내 H열(전화번호) 중복 시 1건만 카운트</li>
-              <li>• <strong>일반 카운트:</strong> 위 조건에 해당하지 않는 모든 문의건 → 모두 카운트</li>
-            </ul>
-          </div>
             </CardContent>
           </CollapsibleContent>
         </Card>
       </Collapsible>
+
+      {/* 문의건 카운트 로직 (항상 표시) */}
+      <div className="p-4 bg-muted rounded-lg">
+        <h4 className="font-semibold mb-2">📋 문의건 카운트 로직</h4>
+        <ul className="space-y-1 text-sm text-muted-foreground">
+          <li>• <strong>완전 제외:</strong> E열 = "AI응대", "문의건X", "특허관리팀전달" → 카운트 안 함</li>
+          <li>• <strong>중복 제거:</strong> E열 = "리마인드CRM", "연락처중복" → 같은 달 내 H열(전화번호) 중복 시 1건만 카운트</li>
+          <li>• <strong>일반 카운트:</strong> 위 조건에 해당하지 않는 모든 문의건 → 모두 카운트</li>
+        </ul>
+      </div>
     </div>
   )
 }
