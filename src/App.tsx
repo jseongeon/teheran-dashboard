@@ -98,8 +98,8 @@ export default function App() {
 
   // 페이지 변경 핸들러 (2차 인증 체크 포함)
   const handleSetCurrentPage = (page: PageState) => {
-    // 세부매체 데이터 페이지 접근 시 2차 인증 필요
-    if (page.main === "세부매체 데이터") {
+    // 문의/수임/실시간 페이지 접근 시 2차 인증 필요 (고객 개인정보 보호)
+    if (page.main === "문의" || page.main === "수임" || page.main === "실시간") {
       setPendingPage(page)
       setIsSecondaryAuthOpen(true)
     } else {
@@ -159,7 +159,7 @@ export default function App() {
       case "홈":
         return <Dashboard inquiries={inquiries} contracts={contracts} isDarkMode={darkMode} />
       case "실시간":
-        return <RealtimePage inquiries={inquiries} contracts={contracts} isDarkMode={darkMode} />
+        return <RealtimePage inquiries={inquiries} contracts={contracts} />
       case "문의":
         return <InquiryPage subPage={currentPage.sub} inquiries={inquiries} />
       case "수임":
