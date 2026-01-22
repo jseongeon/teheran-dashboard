@@ -4,6 +4,8 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Responsive
 import { InquiryData, ContractData } from "../../types"
 import { useMemo, useState, useEffect } from "react"
 import { filterBySource, countInquiries, filterHomepageByType, filterViralByType } from "../../lib/googleSheets"
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "../ui/collapsible"
+import { ChevronDown } from "lucide-react"
 
 interface DetailedMediaPageProps {
   subPage?: string
@@ -18,6 +20,7 @@ const COLORS = ["#3b82f6", "#10b981", "#f59e0b", "#8b5cf6"]
 export function DetailedMediaPage({ subPage, inquiries, contracts, isDarkMode }: DetailedMediaPageProps) {
   const [activeTab, setActiveTab] = useState(subPage || "홈페이지 · 유료광고")
   const [homepageFilter, setHomepageFilter] = useState<"전체" | "유선" | "채팅">("전체")
+  const [isMediaClassificationOpen, setIsMediaClassificationOpen] = useState(false)
 
   // subPage가 변경되면 activeTab 업데이트
   useEffect(() => {
@@ -566,13 +569,22 @@ export function DetailedMediaPage({ subPage, inquiries, contracts, isDarkMode }:
         </CardContent>
       </Card>
 
-      {/* 매체 분류 기준표 */}
-      <Card>
-        <CardHeader>
-          <CardTitle>매체 분류 기준 (E열 세부매체)</CardTitle>
-          <CardDescription>각 매체 카테고리별 세부매체 목록</CardDescription>
-        </CardHeader>
-        <CardContent>
+      {/* 매체 분류 기준표 (토글) */}
+      <Collapsible open={isMediaClassificationOpen} onOpenChange={setIsMediaClassificationOpen}>
+        <Card>
+          <CollapsibleTrigger asChild>
+            <CardHeader className="cursor-pointer hover:bg-muted/50 transition-colors">
+              <div className="flex items-center justify-between">
+                <div>
+                  <CardTitle>매체 분류 기준 (E열 세부매체)</CardTitle>
+                  <CardDescription>각 매체 카테고리별 세부매체 목록</CardDescription>
+                </div>
+                <ChevronDown className={`h-5 w-5 text-muted-foreground transition-transform duration-200 ${isMediaClassificationOpen ? 'rotate-180' : ''}`} />
+              </div>
+            </CardHeader>
+          </CollapsibleTrigger>
+          <CollapsibleContent>
+            <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             {/* 홈페이지 · 유료광고 */}
             <div className="border rounded-lg p-4" style={{ backgroundColor: isDarkMode ? 'rgba(59, 130, 246, 0.1)' : 'rgba(59, 130, 246, 0.05)', borderColor: '#3b82f6' }}>
@@ -722,8 +734,10 @@ export function DetailedMediaPage({ subPage, inquiries, contracts, isDarkMode }:
               <li>• <strong>일반 카운트:</strong> 위 조건에 해당하지 않는 모든 문의건 → 모두 카운트</li>
             </ul>
           </div>
-        </CardContent>
-      </Card>
+            </CardContent>
+          </CollapsibleContent>
+        </Card>
+      </Collapsible>
     </div>
   )
 }
