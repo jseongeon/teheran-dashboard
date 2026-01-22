@@ -1,9 +1,14 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card"
 import { Button } from "../ui/button"
+import { Input } from "../ui/input"
 import { useState, useMemo, useEffect } from "react"
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, LineChart, Line } from "recharts"
 import { InquiryData, ContractData } from "../../types"
 import { countInquiries } from "../../lib/googleSheets"
+import { Lock, Unlock } from "lucide-react"
+
+// 매출 확인 암호
+const REVENUE_PASSWORD = "wjdtjddjs"
 
 const metricTypes = ["월 실적", "분기 실적", "연 실적"] as const
 const months = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12] as const
@@ -16,15 +21,96 @@ interface DetailedMetricsPageProps {
   isDarkMode?: boolean
 }
 
+// 매출 카드 컴포넌트 (암호 보호)
+function RevenueCard({
+  revenue,
+  label,
+  isUnlocked,
+  password,
+  onPasswordChange,
+  onUnlock
+}: {
+  revenue: number
+  label: string
+  isUnlocked: boolean
+  password: string
+  onPasswordChange: (value: string) => void
+  onUnlock: () => void
+}) {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      onUnlock()
+    }
+  }
+
+  return (
+    <Card>
+      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+        <CardTitle className="text-sm font-medium">총 매출</CardTitle>
+        {isUnlocked ? (
+          <Unlock className="h-4 w-4 text-green-500" />
+        ) : (
+          <Lock className="h-4 w-4 text-muted-foreground" />
+        )}
+      </CardHeader>
+      <CardContent>
+        {isUnlocked ? (
+          <>
+            <div className="text-2xl font-bold">
+              ₩{revenue.toLocaleString()}
+            </div>
+            <p className="text-xs text-muted-foreground">
+              {label}
+            </p>
+          </>
+        ) : (
+          <div className="space-y-2">
+            <p className="text-sm text-muted-foreground">
+              매출 확인 시 암호가 필요합니다
+            </p>
+            <div className="flex gap-2">
+              <Input
+                type="password"
+                placeholder="암호 입력"
+                value={password}
+                onChange={(e) => onPasswordChange(e.target.value)}
+                onKeyDown={handleKeyDown}
+                className="h-8 text-sm"
+              />
+              <Button size="sm" onClick={onUnlock} className="h-8">
+                확인
+              </Button>
+            </div>
+          </div>
+        )}
+      </CardContent>
+    </Card>
+  )
+}
+
 export function DetailedMetricsPage({ subPage, inquiries, contracts, isDarkMode }: DetailedMetricsPageProps) {
   const [activeTab, setActiveTab] = useState(subPage || "월 실적")
-  
+
+  // 매출 암호 관련 상태
+  const [revenueUnlocked, setRevenueUnlocked] = useState(false)
+  const [revenuePassword, setRevenuePassword] = useState("")
+
+  // 매출 잠금 해제 핸들러
+  const handleUnlockRevenue = () => {
+    if (revenuePassword === REVENUE_PASSWORD) {
+      setRevenueUnlocked(true)
+      setRevenuePassword("")
+    } else {
+      alert("암호가 올바르지 않습니다.")
+    }
+  }
+
   // 연도 선택 (기본값: 2025년)
   const [selectedYear, setSelectedYear] = useState<number>(2025) // 2025년 고정
-  
+
   // 월 실적용 월 선택 (기본값: 현재 월)
   const [selectedMonth, setSelectedMonth] = useState<number>(new Date().getMonth() + 1)
-  
+
   // 분기 실적용 분기 선택 (기본값: 현재 분기)
   const [selectedQuarter, setSelectedQuarter] = useState<number>(() => {
     const now = new Date()
@@ -361,19 +447,14 @@ export function DetailedMetricsPage({ subPage, inquiries, contracts, isDarkMode 
                 </CardContent>
               </Card>
 
-              <Card>
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium">총 매출</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold">
-                    ₩{selectedMonthStats.revenue.toLocaleString()}
-                  </div>
-                  <p className="text-xs text-muted-foreground">
-                    월 총액
-                  </p>
-                </CardContent>
-              </Card>
+              <RevenueCard
+                revenue={selectedMonthStats.revenue}
+                label="월 총액"
+                isUnlocked={revenueUnlocked}
+                password={revenuePassword}
+                onPasswordChange={setRevenuePassword}
+                onUnlock={handleUnlockRevenue}
+              />
             </div>
 
             <Card>
@@ -480,19 +561,14 @@ export function DetailedMetricsPage({ subPage, inquiries, contracts, isDarkMode 
                 </CardContent>
               </Card>
 
-              <Card>
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium">총 매출</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold">
-                    ₩{selectedQuarterStats.totalRevenue.toLocaleString()}
-                  </div>
-                  <p className="text-xs text-muted-foreground">
-                    분기 총액
-                  </p>
-                </CardContent>
-              </Card>
+              <RevenueCard
+                revenue={selectedQuarterStats.totalRevenue}
+                label="분기 총액"
+                isUnlocked={revenueUnlocked}
+                password={revenuePassword}
+                onPasswordChange={setRevenuePassword}
+                onUnlock={handleUnlockRevenue}
+              />
             </div>
 
             <Card>
@@ -583,19 +659,14 @@ export function DetailedMetricsPage({ subPage, inquiries, contracts, isDarkMode 
                 </CardContent>
               </Card>
 
-              <Card>
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium">총 매출</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold">
-                    ₩{yearlyStats.totalRevenue.toLocaleString()}
-                  </div>
-                  <p className="text-xs text-muted-foreground">
-                    연 총액
-                  </p>
-                </CardContent>
-              </Card>
+              <RevenueCard
+                revenue={yearlyStats.totalRevenue}
+                label="연 총액"
+                isUnlocked={revenueUnlocked}
+                password={revenuePassword}
+                onPasswordChange={setRevenuePassword}
+                onUnlock={handleUnlockRevenue}
+              />
             </div>
 
             <Card>
