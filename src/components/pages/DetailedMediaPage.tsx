@@ -215,26 +215,21 @@ export function DetailedMediaPage({ subPage, inquiries, contracts, isDarkMode }:
     }
   }, [inquiries, contracts])
 
-  // 문의건X 세부 통계
-  const excludedDetailStats = useMemo(() => {
+  // 문의건X 통계 (유형 구분 없이 전체)
+  const excludedStats = useMemo(() => {
     const excludedInquiries = inquiries.filter(i => i.source === "문의건X")
-    const excludedContracts = contracts.filter(c => c.source === "문의건X")
-    
-    const 유선Inquiries = excludedInquiries.filter(i => i.receiptType === "유선")
-    const 유선Contracts = excludedContracts.filter(c => c.receiptType === "유선")
-    
-    const 유선문의 = countInquiries(유선Inquiries)
-    const 유선수임 = 유선Contracts.length
-    
+
+    const 총문의 = countInquiries(excludedInquiries)
+    // ⭐ 수임건: 문의 기준 (inquiries에서 isContract === true)
+    const 총수임 = excludedInquiries.filter(i => i.isContract).length
+
     return {
-      유선: {
-        문의: 유선문의,
-        수임: 유선수임,
-        수임율: 유선문의 > 0 ? ((유선수임 / 유선문의) * 100).toFixed(1) : "0.0",
-        예시: "리마인드CRM, 문의외수임, 연락처중복, crm메일, 타법인전달"
-      }
+      문의: 총문의,
+      수임: 총수임,
+      수임율: 총문의 > 0 ? ((총수임 / 총문의) * 100).toFixed(1) : "0.0",
+      세부매체: "리마인드CRM, 문의외수임, 연락처중복, crm메일, 타법인전달, 직통문의"
     }
-  }, [inquiries, contracts])
+  }, [inquiries])
 
   return (
     <div className="flex-1 space-y-6 p-6">
@@ -539,34 +534,31 @@ export function DetailedMediaPage({ subPage, inquiries, contracts, isDarkMode }:
         </CardContent>
       </Card>
 
-      {/* 문의건X 세부 분석 */}
+      {/* 문의건X 통계 */}
       <Card>
         <CardHeader>
-          <CardTitle>문의건X 유형별 통계</CardTitle>
-          <CardDescription>유선 상담 유형별 성과 분석</CardDescription>
+          <CardTitle>문의건X 통계</CardTitle>
+          <CardDescription>문의건으로 카운트되지 않는 항목 (리마인드CRM, 문의외수임, 연락처중복 등)</CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead>
-                <tr className="border-b">
-                  <th className="text-left py-3 px-4">유형</th>
-                  <th className="text-right py-3 px-4">문의 건수</th>
-                  <th className="text-right py-3 px-4">수임 건수</th>
-                  <th className="text-right py-3 px-4">수임율</th>
-                  <th className="text-left py-3 px-4">세부 매체</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr className="hover:bg-muted/50">
-                  <td className="py-3 px-4">유선</td>
-                  <td className="text-right py-3 px-4">{excludedDetailStats.유선.문의}건</td>
-                  <td className="text-right py-3 px-4">{excludedDetailStats.유선.수임}건</td>
-                  <td className="text-right py-3 px-4">{excludedDetailStats.유선.수임율}%</td>
-                  <td className="py-3 px-4 text-sm text-muted-foreground">{excludedDetailStats.유선.예시}</td>
-                </tr>
-              </tbody>
-            </table>
+          <div className="grid gap-4 md:grid-cols-3">
+            <div className="text-center p-4 bg-muted/50 rounded-lg">
+              <p className="text-sm text-muted-foreground">총 건수</p>
+              <p className="text-2xl font-bold">{excludedStats.문의}건</p>
+            </div>
+            <div className="text-center p-4 bg-muted/50 rounded-lg">
+              <p className="text-sm text-muted-foreground">수임 건수</p>
+              <p className="text-2xl font-bold">{excludedStats.수임}건</p>
+            </div>
+            <div className="text-center p-4 bg-muted/50 rounded-lg">
+              <p className="text-sm text-muted-foreground">수임율</p>
+              <p className="text-2xl font-bold">{excludedStats.수임율}%</p>
+            </div>
+          </div>
+          <div className="mt-4 p-3 bg-muted/30 rounded-lg">
+            <p className="text-sm text-muted-foreground">
+              <strong>세부 매체:</strong> {excludedStats.세부매체}
+            </p>
           </div>
         </CardContent>
       </Card>
