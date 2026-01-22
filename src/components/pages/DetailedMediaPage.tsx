@@ -541,24 +541,27 @@ export function DetailedMediaPage({ subPage, inquiries, contracts, isDarkMode }:
           <CardDescription>문의건으로 카운트되지 않는 항목 (리마인드CRM, 문의외수임, 연락처중복 등)</CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="grid gap-4 md:grid-cols-3">
-            <div className="text-center p-4 bg-muted/50 rounded-lg">
-              <p className="text-sm text-muted-foreground">총 건수</p>
-              <p className="text-2xl font-bold">{excludedStats.문의}건</p>
-            </div>
-            <div className="text-center p-4 bg-muted/50 rounded-lg">
-              <p className="text-sm text-muted-foreground">수임 건수</p>
-              <p className="text-2xl font-bold">{excludedStats.수임}건</p>
-            </div>
-            <div className="text-center p-4 bg-muted/50 rounded-lg">
-              <p className="text-sm text-muted-foreground">수임율</p>
-              <p className="text-2xl font-bold">{excludedStats.수임율}%</p>
-            </div>
-          </div>
-          <div className="mt-4 p-3 bg-muted/30 rounded-lg">
-            <p className="text-sm text-muted-foreground">
-              <strong>세부 매체:</strong> {excludedStats.세부매체}
-            </p>
+          <div className="overflow-x-auto">
+            <table className="w-full">
+              <thead>
+                <tr className="border-b">
+                  <th className="text-left py-3 px-4">유형</th>
+                  <th className="text-right py-3 px-4">문의 건수</th>
+                  <th className="text-right py-3 px-4">수임 건수</th>
+                  <th className="text-right py-3 px-4">수임율</th>
+                  <th className="text-left py-3 px-4">세부 매체</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr className="hover:bg-muted/50">
+                  <td className="py-3 px-4">-</td>
+                  <td className="text-right py-3 px-4">{excludedStats.문의}건</td>
+                  <td className="text-right py-3 px-4">{excludedStats.수임}건</td>
+                  <td className="text-right py-3 px-4">{excludedStats.수임율}%</td>
+                  <td className="py-3 px-4 text-sm text-muted-foreground">{excludedStats.세부매체}</td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </CardContent>
       </Card>
