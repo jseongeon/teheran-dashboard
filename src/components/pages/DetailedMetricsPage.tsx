@@ -47,27 +47,32 @@ export function DetailedMetricsPage({ subPage, inquiries, contracts, isDarkMode 
   const selectedMonthStats = useMemo(() => {
     const year = selectedYear
     const month = selectedMonth - 1
-    
+
+    // B열(문의일) 기준으로 필터링
     const monthInquiries = inquiries.filter(i => {
       const d = new Date(i.date)
       return d.getFullYear() === year && d.getMonth() === month
     })
-    
-    const monthContracts = contracts.filter(c => {
+
+    // ⭐ 수임건: 문의 기준 (B열 기준 + Q열 isContract === true)
+    const monthContractsFromInquiries = monthInquiries.filter(i => i.isContract)
+
+    // 매출 계산용 (R열 수임일 기준)
+    const monthContractsForRevenue = contracts.filter(c => {
       const dateToUse = c.contractDate || c.date
       const d = new Date(dateToUse)
       return d.getFullYear() === year && d.getMonth() === month
     })
-    
+
     // 일별 데이터 생성
     const dailyData: { [key: string]: { inquiries: number, contracts: number } } = {}
     const lastDay = new Date(year, month + 1, 0).getDate()
-    
+
     for (let day = 1; day <= lastDay; day++) {
       const dateKey = `${month + 1}/${String(day).padStart(2, '0')}`
       dailyData[dateKey] = { inquiries: 0, contracts: 0 }
     }
-    
+
     monthInquiries.forEach(i => {
       const d = new Date(i.date)
       const dateKey = `${d.getMonth() + 1}/${String(d.getDate()).padStart(2, '0')}`
@@ -75,16 +80,16 @@ export function DetailedMetricsPage({ subPage, inquiries, contracts, isDarkMode 
         dailyData[dateKey].inquiries++
       }
     })
-    
-    monthContracts.forEach(c => {
-      const dateToUse = c.contractDate || c.date
-      const d = new Date(dateToUse)
+
+    // ⭐ 수임건도 문의일(B열) 기준으로 차트 데이터 생성
+    monthContractsFromInquiries.forEach(i => {
+      const d = new Date(i.date)
       const dateKey = `${d.getMonth() + 1}/${String(d.getDate()).padStart(2, '0')}`
       if (dailyData[dateKey]) {
         dailyData[dateKey].contracts++
       }
     })
-    
+
     // 5일 간격으로 샘플링
     const chartData = []
     for (let day = 1; day <= lastDay; day += 5) {
@@ -106,15 +111,16 @@ export function DetailedMetricsPage({ subPage, inquiries, contracts, isDarkMode 
         contracts: dailyData[lastDateKey].contracts
       })
     }
-    
-    const revenue = monthContracts.reduce((sum, c) => {
+
+    // 매출은 R열(수임일) 기준
+    const revenue = monthContractsForRevenue.reduce((sum, c) => {
       const amount = parseInt(c.amount?.replace(/[^0-9]/g, '') || '0')
       return sum + amount
     }, 0)
-    
+
     return {
       totalInquiries: countInquiries(monthInquiries),
-      totalContracts: monthContracts.length,
+      totalContracts: monthContractsFromInquiries.length, // ⭐ 문의 기준 수임건
       revenue,
       chartData
     }
@@ -124,45 +130,50 @@ export function DetailedMetricsPage({ subPage, inquiries, contracts, isDarkMode 
   const selectedQuarterStats = useMemo(() => {
     const year = selectedYear
     const quarter = selectedQuarter - 1
-    
+
     const quarterMonths = [
       quarter * 3,
       quarter * 3 + 1,
       quarter * 3 + 2
     ]
-    
+
     const monthlyData = quarterMonths.map((month) => {
       const monthName = `${month + 1}월`
-      
+
+      // B열(문의일) 기준으로 필터링
       const monthInquiries = inquiries.filter(i => {
         const d = new Date(i.date)
         return d.getFullYear() === year && d.getMonth() === month
       })
-      
-      const monthContracts = contracts.filter(c => {
+
+      // ⭐ 수임건: 문의 기준 (B열 기준 + Q열 isContract === true)
+      const monthContractsFromInquiries = monthInquiries.filter(i => i.isContract)
+
+      // 매출 계산용 (R열 수임일 기준)
+      const monthContractsForRevenue = contracts.filter(c => {
         const dateToUse = c.contractDate || c.date
         const d = new Date(dateToUse)
         return d.getFullYear() === year && d.getMonth() === month
       })
-      
-      const revenue = monthContracts.reduce((sum, c) => {
+
+      const revenue = monthContractsForRevenue.reduce((sum, c) => {
         const amount = parseInt(c.amount?.replace(/[^0-9]/g, '') || '0')
         return sum + amount
       }, 0)
-      
+
       return {
         month: monthName,
         inquiries: countInquiries(monthInquiries),
-        contracts: monthContracts.length,
+        contracts: monthContractsFromInquiries.length, // ⭐ 문의 기준 수임건
         revenue
       }
     })
-    
+
     const totalInquiries = monthlyData.reduce((sum, m) => sum + m.inquiries, 0)
     const totalContracts = monthlyData.reduce((sum, m) => sum + m.contracts, 0)
     const totalRevenue = monthlyData.reduce((sum, m) => sum + m.revenue, 0)
     const avgRate = totalInquiries > 0 ? (totalContracts / totalInquiries) * 100 : 0
-    
+
     return {
       totalInquiries,
       totalContracts,
@@ -176,71 +187,81 @@ export function DetailedMetricsPage({ subPage, inquiries, contracts, isDarkMode 
   // 전체 연도 실적 계산
   const yearlyStats = useMemo(() => {
     const currentYear = selectedYear
-    
+
     // 월별 데이터 생성 (1월~12월)
     const monthlyData = Array.from({ length: 12 }, (_, index) => {
       const month = index
       const monthName = `${month + 1}월`
-      
+
+      // B열(문의일) 기준으로 필터링
       const monthInquiries = inquiries.filter(i => {
         const d = new Date(i.date)
         return d.getFullYear() === currentYear && d.getMonth() === month
       })
-      
-      const monthContracts = contracts.filter(c => {
+
+      // ⭐ 수임건: 문의 기준 (B열 기준 + Q열 isContract === true)
+      const monthContractsFromInquiries = monthInquiries.filter(i => i.isContract)
+
+      // 매출 계산용 (R열 수임일 기준)
+      const monthContractsForRevenue = contracts.filter(c => {
         const dateToUse = c.contractDate || c.date
         const d = new Date(dateToUse)
         return d.getFullYear() === currentYear && d.getMonth() === month
       })
-      
-      const revenue = monthContracts.reduce((sum, c) => {
+
+      const revenue = monthContractsForRevenue.reduce((sum, c) => {
         const amount = parseInt(c.amount?.replace(/[^0-9]/g, '') || '0')
         return sum + amount
       }, 0)
-      
+
       return {
         month: monthName,
         inquiries: countInquiries(monthInquiries),
-        contracts: monthContracts.length,
+        contracts: monthContractsFromInquiries.length, // ⭐ 문의 기준 수임건
         revenue
       }
     })
-    
+
     // 분기별 데이터 생성
     const quarterlyData = Array.from({ length: 4 }, (_, index) => {
       const quarter = index
       const quarterName = `${quarter + 1}분기`
       const quarterMonths = [quarter * 3, quarter * 3 + 1, quarter * 3 + 2]
-      
+
+      // B열(문의일) 기준으로 필터링
       const quarterInquiries = inquiries.filter(i => {
         const d = new Date(i.date)
         return d.getFullYear() === currentYear && quarterMonths.includes(d.getMonth())
       })
-      
-      const quarterContracts = contracts.filter(c => {
+
+      // ⭐ 수임건: 문의 기준 (B열 기준 + Q열 isContract === true)
+      const quarterContractsFromInquiries = quarterInquiries.filter(i => i.isContract)
+
+      // 매출 계산용 (R열 수임일 기준)
+      const quarterContractsForRevenue = contracts.filter(c => {
         const dateToUse = c.contractDate || c.date
         const d = new Date(dateToUse)
         return d.getFullYear() === currentYear && quarterMonths.includes(d.getMonth())
       })
-      
-      const revenue = quarterContracts.reduce((sum, c) => {
+
+      const revenue = quarterContractsForRevenue.reduce((sum, c) => {
         const amount = parseInt(c.amount?.replace(/[^0-9]/g, '') || '0')
         return sum + amount
       }, 0)
-      
+
       return {
         quarter: quarterName,
         inquiries: countInquiries(quarterInquiries),
-        contracts: quarterContracts.length,
+        contracts: quarterContractsFromInquiries.length, // ⭐ 문의 기준 수임건
         revenue
       }
     })
-    
+
     const totalInquiries = monthlyData.reduce((sum, m) => sum + m.inquiries, 0)
     const totalContracts = monthlyData.reduce((sum, m) => sum + m.contracts, 0)
     const totalRevenue = monthlyData.reduce((sum, m) => sum + m.revenue, 0)
     const avgRate = totalInquiries > 0 ? (totalContracts / totalInquiries) * 100 : 0
-    
+
     return {
       totalInquiries,
       totalContracts,
