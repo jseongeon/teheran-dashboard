@@ -579,9 +579,9 @@ export function DetailedMediaPage({ subPage, inquiries, contracts, isDarkMode }:
                   <CardTitle>매체 분류 기준 (E열 세부매체)</CardTitle>
                   <CardDescription>각 매체 카테고리별 세부매체 목록</CardDescription>
                 </div>
-                <div className="flex items-center gap-2 text-muted-foreground">
-                  <span className="text-xs">{isMediaClassificationOpen ? '접기' : '펼치기'}</span>
-                  <ChevronDown className={`h-5 w-5 transition-transform duration-200 ${isMediaClassificationOpen ? 'rotate-180' : ''}`} />
+                <div className="flex items-center gap-3 text-muted-foreground">
+                  <span className="text-sm font-medium">{isMediaClassificationOpen ? '📁 접기' : '📂 펼치기'}</span>
+                  <ChevronDown className={`h-6 w-6 transition-transform duration-200 ${isMediaClassificationOpen ? 'rotate-180' : ''}`} />
                 </div>
               </div>
             </CardHeader>
