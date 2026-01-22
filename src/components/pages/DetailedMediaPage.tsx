@@ -580,7 +580,7 @@ export function DetailedMediaPage({ subPage, inquiries, contracts, isDarkMode }:
                   <CardDescription>각 매체 카테고리별 세부매체 목록</CardDescription>
                 </div>
                 <div className="flex items-center gap-3 text-muted-foreground">
-                  <span className="text-sm font-medium">{isMediaClassificationOpen ? '📁 접기' : '📂 펼치기'}</span>
+                  <span className="text-sm font-medium">{isMediaClassificationOpen ? '📂 접기' : '📁 펼치기'}</span>
                   <ChevronDown className={`h-6 w-6 transition-transform duration-200 ${isMediaClassificationOpen ? 'rotate-180' : ''}`} />
                 </div>
               </div>
