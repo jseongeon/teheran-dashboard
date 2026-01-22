@@ -571,15 +571,18 @@ export function DetailedMediaPage({ subPage, inquiries, contracts, isDarkMode }:
 
       {/* 매체 분류 기준표 (토글) */}
       <Collapsible open={isMediaClassificationOpen} onOpenChange={setIsMediaClassificationOpen}>
-        <Card>
+        <Card className={`transition-all duration-200 ${!isMediaClassificationOpen ? 'hover:shadow-md hover:border-primary/30' : ''}`}>
           <CollapsibleTrigger asChild>
-            <CardHeader className="cursor-pointer hover:bg-muted/50 transition-colors">
+            <CardHeader className="cursor-pointer hover:bg-muted/50 transition-colors select-none">
               <div className="flex items-center justify-between">
                 <div>
                   <CardTitle>매체 분류 기준 (E열 세부매체)</CardTitle>
                   <CardDescription>각 매체 카테고리별 세부매체 목록</CardDescription>
                 </div>
-                <ChevronDown className={`h-5 w-5 text-muted-foreground transition-transform duration-200 ${isMediaClassificationOpen ? 'rotate-180' : ''}`} />
+                <div className="flex items-center gap-2 text-muted-foreground">
+                  <span className="text-xs">{isMediaClassificationOpen ? '접기' : '펼치기'}</span>
+                  <ChevronDown className={`h-5 w-5 transition-transform duration-200 ${isMediaClassificationOpen ? 'rotate-180' : ''}`} />
+                </div>
               </div>
             </CardHeader>
           </CollapsibleTrigger>
