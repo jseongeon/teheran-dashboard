@@ -235,16 +235,16 @@ export function DetailedMediaPage({ subPage, inquiries, contracts, isDarkMode }:
   }, [inquiries])
 
   return (
-    <div className="flex-1 space-y-6 p-6">
+    <div className="flex-1 space-y-4 md:space-y-6 p-3 md:p-6">
       <div>
-        <h1 className="text-3xl font-bold tracking-tight">세부매체 분석</h1>
-        <p className="text-muted-foreground">
+        <h1 className="text-2xl md:text-3xl font-bold tracking-tight">세부매체 분석</h1>
+        <p className="text-sm md:text-base text-muted-foreground">
           매체별 상세 성과를 분석하세요
         </p>
       </div>
 
       {/* 매체별 요약 카드 */}
-      <div className="grid gap-4 md:grid-cols-4">
+      <div className="grid gap-3 md:gap-4 grid-cols-2 lg:grid-cols-4">
         {MEDIA_SOURCES.map((source, index) => {
           const sourceInquiries = inquiries.filter(i => i.source === source)
           const inquiryCount = countInquiries(sourceInquiries)
@@ -253,17 +253,18 @@ export function DetailedMediaPage({ subPage, inquiries, contracts, isDarkMode }:
           
           return (
             <Card key={source}>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">{source}</CardTitle>
-                <div 
-                  className="h-3 w-3 rounded-full" 
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 p-3 md:p-6 md:pb-2">
+                <CardTitle className="text-xs md:text-sm font-medium truncate pr-2">{source}</CardTitle>
+                <div
+                  className="h-2 w-2 md:h-3 md:w-3 rounded-full flex-shrink-0"
                   style={{ backgroundColor: COLORS[index] }}
                 />
               </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">{inquiryCount}</div>
-                <p className="text-xs text-muted-foreground">
-                  문의 {inquiryCount}건 · 수임 {contractCount}건 · 수임율 {rate}%
+              <CardContent className="p-3 pt-0 md:p-6 md:pt-0">
+                <div className="text-xl md:text-2xl font-bold">{inquiryCount}</div>
+                <p className="text-[10px] md:text-xs text-muted-foreground">
+                  <span className="hidden sm:inline">문의 {inquiryCount}건 · 수임 {contractCount}건 · 수임율 {rate}%</span>
+                  <span className="sm:hidden">수임 {contractCount} · {rate}%</span>
                 </p>
               </CardContent>
             </Card>
@@ -272,14 +273,14 @@ export function DetailedMediaPage({ subPage, inquiries, contracts, isDarkMode }:
       </div>
 
       {/* 매체별 문의/수임 비교 차트 */}
-      <div className="grid gap-4 md:grid-cols-2">
+      <div className="grid gap-3 md:gap-4 grid-cols-1 lg:grid-cols-2">
         <Card>
-          <CardHeader>
-            <CardTitle>매체별 문의 건수</CardTitle>
-            <CardDescription>각 매체에서 유입된 문의 건수</CardDescription>
+          <CardHeader className="p-3 md:p-6">
+            <CardTitle className="text-base md:text-lg">매체별 문의 건수</CardTitle>
+            <CardDescription className="text-xs md:text-sm">각 매체에서 유입된 문의 건수</CardDescription>
           </CardHeader>
-          <CardContent>
-            <ResponsiveContainer width="100%" height={300}>
+          <CardContent className="p-3 pt-0 md:p-6 md:pt-0">
+            <ResponsiveContainer width="100%" height={250} className="md:!h-[300px]">
               <BarChart data={mediaInquiryData}>
                 <CartesianGrid strokeDasharray="3 3" stroke={isDarkMode ? '#374151' : '#e5e7eb'} />
                 <XAxis 
@@ -304,21 +305,25 @@ export function DetailedMediaPage({ subPage, inquiries, contracts, isDarkMode }:
         </Card>
 
         <Card>
-          <CardHeader>
-            <CardTitle>매체별 수임 건수</CardTitle>
-            <CardDescription>각 매체에서 전환된 수임 건수</CardDescription>
+          <CardHeader className="p-3 md:p-6">
+            <CardTitle className="text-base md:text-lg">매체별 수임 건수</CardTitle>
+            <CardDescription className="text-xs md:text-sm">각 매체에서 전환된 수임 건수</CardDescription>
           </CardHeader>
-          <CardContent>
-            <ResponsiveContainer width="100%" height={300}>
+          <CardContent className="p-3 pt-0 md:p-6 md:pt-0">
+            <ResponsiveContainer width="100%" height={250} className="md:!h-[300px]">
               <BarChart data={mediaContractData}>
                 <CartesianGrid strokeDasharray="3 3" stroke={isDarkMode ? '#374151' : '#e5e7eb'} />
-                <XAxis 
-                  dataKey="name" 
+                <XAxis
+                  dataKey="name"
                   stroke={isDarkMode ? '#9ca3af' : '#6b7280'}
+                  tick={{ fontSize: 10 }}
+                  angle={-20}
+                  textAnchor="end"
+                  height={60}
                 />
-                <YAxis stroke={isDarkMode ? '#9ca3af' : '#6b7280'} />
+                <YAxis stroke={isDarkMode ? '#9ca3af' : '#6b7280'} tick={{ fontSize: 10 }} />
                 <Tooltip {...tooltipStyle} />
-                <Legend />
+                <Legend wrapperStyle={{ fontSize: '12px' }} />
                 <Bar dataKey="수임건수">
                   {mediaContractData.map((entry, index) => (
                     <Cell key={`cell-${index}`} fill={COLORS[index]} />
@@ -331,26 +336,31 @@ export function DetailedMediaPage({ subPage, inquiries, contracts, isDarkMode }:
       </div>
 
       {/* 매체별 수임율 및 분포 */}
-      <div className="grid gap-4 md:grid-cols-2">
+      <div className="grid gap-3 md:gap-4 grid-cols-1 lg:grid-cols-2">
         <Card>
-          <CardHeader>
-            <CardTitle>매체별 수임율</CardTitle>
-            <CardDescription>문의 대비 수임 전환율</CardDescription>
+          <CardHeader className="p-3 md:p-6">
+            <CardTitle className="text-base md:text-lg">매체별 수임율</CardTitle>
+            <CardDescription className="text-xs md:text-sm">문의 대비 수임 전환율</CardDescription>
           </CardHeader>
-          <CardContent>
-            <ResponsiveContainer width="100%" height={300}>
+          <CardContent className="p-3 pt-0 md:p-6 md:pt-0">
+            <ResponsiveContainer width="100%" height={250} className="md:!h-[300px]">
               <BarChart data={mediaConversionData}>
                 <CartesianGrid strokeDasharray="3 3" stroke={isDarkMode ? '#374151' : '#e5e7eb'} />
-                <XAxis 
-                  dataKey="name" 
+                <XAxis
+                  dataKey="name"
                   stroke={isDarkMode ? '#9ca3af' : '#6b7280'}
+                  tick={{ fontSize: 10 }}
+                  angle={-20}
+                  textAnchor="end"
+                  height={60}
                 />
-                <YAxis 
+                <YAxis
                   stroke={isDarkMode ? '#9ca3af' : '#6b7280'}
-                  label={{ value: '%', position: 'insideLeft' }}
+                  tick={{ fontSize: 10 }}
+                  label={{ value: '%', position: 'insideLeft', fontSize: 10 }}
                 />
                 <Tooltip {...tooltipStyle} />
-                <Legend />
+                <Legend wrapperStyle={{ fontSize: '12px' }} />
                 <Bar dataKey="수임율">
                   {mediaConversionData.map((entry, index) => (
                     <Cell key={`cell-${index}`} fill={COLORS[index]} />
@@ -362,25 +372,25 @@ export function DetailedMediaPage({ subPage, inquiries, contracts, isDarkMode }:
         </Card>
 
         <Card>
-          <CardHeader>
-            <CardTitle>매체별 문의 분포</CardTitle>
-            <CardDescription>전체 문의 중 각 매체의 비중</CardDescription>
+          <CardHeader className="p-3 md:p-6">
+            <CardTitle className="text-base md:text-lg">매체별 문의 분포</CardTitle>
+            <CardDescription className="text-xs md:text-sm">전체 문의 중 각 매체의 비중</CardDescription>
           </CardHeader>
-          <CardContent>
-            <ResponsiveContainer width="100%" height={300}>
+          <CardContent className="p-3 pt-0 md:p-6 md:pt-0">
+            <ResponsiveContainer width="100%" height={250} className="md:!h-[300px]">
               <PieChart>
                 <Pie
                   data={mediaStats}
                   cx="50%"
                   cy="50%"
-                  labelLine={true}
-                  label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
-                  outerRadius={80}
+                  labelLine={false}
+                  label={({ name, percent }) => `${(percent * 100).toFixed(0)}%`}
+                  outerRadius={60}
                   dataKey="value"
                 >
                   {mediaStats.map((entry, index) => (
-                    <Cell 
-                      key={`cell-${index}`} 
+                    <Cell
+                      key={`cell-${index}`}
                       fill={COLORS[index]}
                       stroke={isDarkMode ? '#1f2937' : '#ffffff'}
                       strokeWidth={2}
@@ -388,9 +398,10 @@ export function DetailedMediaPage({ subPage, inquiries, contracts, isDarkMode }:
                   ))}
                 </Pie>
                 <Tooltip {...tooltipStyle} />
-                <Legend 
+                <Legend
                   verticalAlign="bottom"
                   height={36}
+                  wrapperStyle={{ fontSize: '11px' }}
                   formatter={(value) => <span style={{ color: isDarkMode ? '#f3f4f6' : '#111827' }}>{value}</span>}
                 />
               </PieChart>
@@ -401,43 +412,43 @@ export function DetailedMediaPage({ subPage, inquiries, contracts, isDarkMode }:
 
       {/* 홈페이지 세부 분석 */}
       <Card>
-        <CardHeader>
-          <CardTitle>홈페이지/유료광고 유형별 통계</CardTitle>
-          <CardDescription>유선/채팅/기타 상담 유형별 성과 분석</CardDescription>
+        <CardHeader className="p-3 md:p-6">
+          <CardTitle className="text-base md:text-lg">홈페이지/유료광고 유형별 통계</CardTitle>
+          <CardDescription className="text-xs md:text-sm">유선/채팅/기타 상담 유형별 성과 분석</CardDescription>
         </CardHeader>
-        <CardContent>
-          <div className="overflow-x-auto">
-            <table className="w-full">
+        <CardContent className="p-3 pt-0 md:p-6 md:pt-0">
+          <div className="overflow-x-auto -mx-3 md:mx-0">
+            <table className="w-full min-w-[500px] md:min-w-0">
               <thead>
                 <tr className="border-b">
-                  <th className="text-left py-3 px-4">유형</th>
-                  <th className="text-right py-3 px-4">문의 건수</th>
-                  <th className="text-right py-3 px-4">수임 건수</th>
-                  <th className="text-right py-3 px-4">수임율</th>
-                  <th className="text-left py-3 px-4">세부 매체</th>
+                  <th className="text-left py-2 md:py-3 px-3 md:px-4 text-xs md:text-sm">유형</th>
+                  <th className="text-right py-2 md:py-3 px-3 md:px-4 text-xs md:text-sm">문의</th>
+                  <th className="text-right py-2 md:py-3 px-3 md:px-4 text-xs md:text-sm">수임</th>
+                  <th className="text-right py-2 md:py-3 px-3 md:px-4 text-xs md:text-sm">수임율</th>
+                  <th className="text-left py-2 md:py-3 px-3 md:px-4 text-xs md:text-sm hidden sm:table-cell">세부 매체</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody className="text-xs md:text-sm">
                 <tr className="border-b hover:bg-muted/50">
-                  <td className="py-3 px-4">유선</td>
-                  <td className="text-right py-3 px-4">{homepageDetailStats.유선.문의}건</td>
-                  <td className="text-right py-3 px-4">{homepageDetailStats.유선.수임}건</td>
-                  <td className="text-right py-3 px-4">{homepageDetailStats.유선.수임율}%</td>
-                  <td className="py-3 px-4 text-sm text-muted-foreground">{homepageDetailStats.유선.예시}</td>
+                  <td className="py-2 md:py-3 px-3 md:px-4">유선</td>
+                  <td className="text-right py-2 md:py-3 px-3 md:px-4">{homepageDetailStats.유선.문의}</td>
+                  <td className="text-right py-2 md:py-3 px-3 md:px-4">{homepageDetailStats.유선.수임}</td>
+                  <td className="text-right py-2 md:py-3 px-3 md:px-4">{homepageDetailStats.유선.수임율}%</td>
+                  <td className="py-2 md:py-3 px-3 md:px-4 text-muted-foreground hidden sm:table-cell max-w-[200px] truncate">{homepageDetailStats.유선.예시}</td>
                 </tr>
                 <tr className="border-b hover:bg-muted/50">
-                  <td className="py-3 px-4">채팅</td>
-                  <td className="text-right py-3 px-4">{homepageDetailStats.채팅.문의}건</td>
-                  <td className="text-right py-3 px-4">{homepageDetailStats.채팅.수임}건</td>
-                  <td className="text-right py-3 px-4">{homepageDetailStats.채팅.수임율}%</td>
-                  <td className="py-3 px-4 text-sm text-muted-foreground">{homepageDetailStats.채팅.예시}</td>
+                  <td className="py-2 md:py-3 px-3 md:px-4">채팅</td>
+                  <td className="text-right py-2 md:py-3 px-3 md:px-4">{homepageDetailStats.채팅.문의}</td>
+                  <td className="text-right py-2 md:py-3 px-3 md:px-4">{homepageDetailStats.채팅.수임}</td>
+                  <td className="text-right py-2 md:py-3 px-3 md:px-4">{homepageDetailStats.채팅.수임율}%</td>
+                  <td className="py-2 md:py-3 px-3 md:px-4 text-muted-foreground hidden sm:table-cell max-w-[200px] truncate">{homepageDetailStats.채팅.예시}</td>
                 </tr>
                 <tr className="hover:bg-muted/50">
-                  <td className="py-3 px-4">기타</td>
-                  <td className="text-right py-3 px-4">{homepageDetailStats.기타.문의}건</td>
-                  <td className="text-right py-3 px-4">{homepageDetailStats.기타.수임}건</td>
-                  <td className="text-right py-3 px-4">{homepageDetailStats.기타.수임율}%</td>
-                  <td className="py-3 px-4 text-sm text-muted-foreground">{homepageDetailStats.기타.예시}</td>
+                  <td className="py-2 md:py-3 px-3 md:px-4">기타</td>
+                  <td className="text-right py-2 md:py-3 px-3 md:px-4">{homepageDetailStats.기타.문의}</td>
+                  <td className="text-right py-2 md:py-3 px-3 md:px-4">{homepageDetailStats.기타.수임}</td>
+                  <td className="text-right py-2 md:py-3 px-3 md:px-4">{homepageDetailStats.기타.수임율}%</td>
+                  <td className="py-2 md:py-3 px-3 md:px-4 text-muted-foreground hidden sm:table-cell max-w-[200px] truncate">{homepageDetailStats.기타.예시}</td>
                 </tr>
               </tbody>
             </table>
@@ -447,43 +458,43 @@ export function DetailedMediaPage({ subPage, inquiries, contracts, isDarkMode }:
 
       {/* 바이럴 세부 분석 */}
       <Card>
-        <CardHeader>
-          <CardTitle>바이럴 유형별 통계</CardTitle>
-          <CardDescription>유선/채팅/기타 상담 유형별 성과 분석</CardDescription>
+        <CardHeader className="p-3 md:p-6">
+          <CardTitle className="text-base md:text-lg">바이럴 유형별 통계</CardTitle>
+          <CardDescription className="text-xs md:text-sm">유선/채팅/기타 상담 유형별 성과 분석</CardDescription>
         </CardHeader>
-        <CardContent>
-          <div className="overflow-x-auto">
-            <table className="w-full">
+        <CardContent className="p-3 pt-0 md:p-6 md:pt-0">
+          <div className="overflow-x-auto -mx-3 md:mx-0">
+            <table className="w-full min-w-[500px] md:min-w-0">
               <thead>
                 <tr className="border-b">
-                  <th className="text-left py-3 px-4">유형</th>
-                  <th className="text-right py-3 px-4">문의 건수</th>
-                  <th className="text-right py-3 px-4">수임 건수</th>
-                  <th className="text-right py-3 px-4">수임율</th>
-                  <th className="text-left py-3 px-4">세부 매체</th>
+                  <th className="text-left py-2 md:py-3 px-3 md:px-4 text-xs md:text-sm">유형</th>
+                  <th className="text-right py-2 md:py-3 px-3 md:px-4 text-xs md:text-sm">문의</th>
+                  <th className="text-right py-2 md:py-3 px-3 md:px-4 text-xs md:text-sm">수임</th>
+                  <th className="text-right py-2 md:py-3 px-3 md:px-4 text-xs md:text-sm">수임율</th>
+                  <th className="text-left py-2 md:py-3 px-3 md:px-4 text-xs md:text-sm hidden sm:table-cell">세부 매체</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody className="text-xs md:text-sm">
                 <tr className="border-b hover:bg-muted/50">
-                  <td className="py-3 px-4">유선</td>
-                  <td className="text-right py-3 px-4">{viralDetailStats.유선.문의}건</td>
-                  <td className="text-right py-3 px-4">{viralDetailStats.유선.수임}건</td>
-                  <td className="text-right py-3 px-4">{viralDetailStats.유선.수임율}%</td>
-                  <td className="py-3 px-4 text-sm text-muted-foreground">{viralDetailStats.유선.예시}</td>
+                  <td className="py-2 md:py-3 px-3 md:px-4">유선</td>
+                  <td className="text-right py-2 md:py-3 px-3 md:px-4">{viralDetailStats.유선.문의}</td>
+                  <td className="text-right py-2 md:py-3 px-3 md:px-4">{viralDetailStats.유선.수임}</td>
+                  <td className="text-right py-2 md:py-3 px-3 md:px-4">{viralDetailStats.유선.수임율}%</td>
+                  <td className="py-2 md:py-3 px-3 md:px-4 text-muted-foreground hidden sm:table-cell max-w-[200px] truncate">{viralDetailStats.유선.예시}</td>
                 </tr>
                 <tr className="border-b hover:bg-muted/50">
-                  <td className="py-3 px-4">채팅</td>
-                  <td className="text-right py-3 px-4">{viralDetailStats.채팅.문의}건</td>
-                  <td className="text-right py-3 px-4">{viralDetailStats.채팅.수임}건</td>
-                  <td className="text-right py-3 px-4">{viralDetailStats.채팅.수임율}%</td>
-                  <td className="py-3 px-4 text-sm text-muted-foreground">{viralDetailStats.채팅.예시}</td>
+                  <td className="py-2 md:py-3 px-3 md:px-4">채팅</td>
+                  <td className="text-right py-2 md:py-3 px-3 md:px-4">{viralDetailStats.채팅.문의}</td>
+                  <td className="text-right py-2 md:py-3 px-3 md:px-4">{viralDetailStats.채팅.수임}</td>
+                  <td className="text-right py-2 md:py-3 px-3 md:px-4">{viralDetailStats.채팅.수임율}%</td>
+                  <td className="py-2 md:py-3 px-3 md:px-4 text-muted-foreground hidden sm:table-cell max-w-[200px] truncate">{viralDetailStats.채팅.예시}</td>
                 </tr>
                 <tr className="hover:bg-muted/50">
-                  <td className="py-3 px-4">기타</td>
-                  <td className="text-right py-3 px-4">{viralDetailStats.기타.문의}건</td>
-                  <td className="text-right py-3 px-4">{viralDetailStats.기타.수임}건</td>
-                  <td className="text-right py-3 px-4">{viralDetailStats.기타.수임율}%</td>
-                  <td className="py-3 px-4 text-sm text-muted-foreground">{viralDetailStats.기타.예시}</td>
+                  <td className="py-2 md:py-3 px-3 md:px-4">기타</td>
+                  <td className="text-right py-2 md:py-3 px-3 md:px-4">{viralDetailStats.기타.문의}</td>
+                  <td className="text-right py-2 md:py-3 px-3 md:px-4">{viralDetailStats.기타.수임}</td>
+                  <td className="text-right py-2 md:py-3 px-3 md:px-4">{viralDetailStats.기타.수임율}%</td>
+                  <td className="py-2 md:py-3 px-3 md:px-4 text-muted-foreground hidden sm:table-cell max-w-[200px] truncate">{viralDetailStats.기타.예시}</td>
                 </tr>
               </tbody>
             </table>
@@ -493,43 +504,43 @@ export function DetailedMediaPage({ subPage, inquiries, contracts, isDarkMode }:
 
       {/* 기타 세부 분석 */}
       <Card>
-        <CardHeader>
-          <CardTitle>기타 유형별 통계</CardTitle>
-          <CardDescription>유선/채팅/기타 상담 유형별 성과 분석</CardDescription>
+        <CardHeader className="p-3 md:p-6">
+          <CardTitle className="text-base md:text-lg">기타 유형별 통계</CardTitle>
+          <CardDescription className="text-xs md:text-sm">유선/채팅/기타 상담 유형별 성과 분석</CardDescription>
         </CardHeader>
-        <CardContent>
-          <div className="overflow-x-auto">
-            <table className="w-full">
+        <CardContent className="p-3 pt-0 md:p-6 md:pt-0">
+          <div className="overflow-x-auto -mx-3 md:mx-0">
+            <table className="w-full min-w-[500px] md:min-w-0">
               <thead>
                 <tr className="border-b">
-                  <th className="text-left py-3 px-4">유형</th>
-                  <th className="text-right py-3 px-4">문의 건수</th>
-                  <th className="text-right py-3 px-4">수임 건수</th>
-                  <th className="text-right py-3 px-4">수임율</th>
-                  <th className="text-left py-3 px-4">세부 매체</th>
+                  <th className="text-left py-2 md:py-3 px-3 md:px-4 text-xs md:text-sm">유형</th>
+                  <th className="text-right py-2 md:py-3 px-3 md:px-4 text-xs md:text-sm">문의</th>
+                  <th className="text-right py-2 md:py-3 px-3 md:px-4 text-xs md:text-sm">수임</th>
+                  <th className="text-right py-2 md:py-3 px-3 md:px-4 text-xs md:text-sm">수임율</th>
+                  <th className="text-left py-2 md:py-3 px-3 md:px-4 text-xs md:text-sm hidden sm:table-cell">세부 매체</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody className="text-xs md:text-sm">
                 <tr className="border-b hover:bg-muted/50">
-                  <td className="py-3 px-4">유선</td>
-                  <td className="text-right py-3 px-4">{etcDetailStats.유선.문의}건</td>
-                  <td className="text-right py-3 px-4">{etcDetailStats.유선.수임}건</td>
-                  <td className="text-right py-3 px-4">{etcDetailStats.유선.수임율}%</td>
-                  <td className="py-3 px-4 text-sm text-muted-foreground">{etcDetailStats.유선.예시}</td>
+                  <td className="py-2 md:py-3 px-3 md:px-4">유선</td>
+                  <td className="text-right py-2 md:py-3 px-3 md:px-4">{etcDetailStats.유선.문의}</td>
+                  <td className="text-right py-2 md:py-3 px-3 md:px-4">{etcDetailStats.유선.수임}</td>
+                  <td className="text-right py-2 md:py-3 px-3 md:px-4">{etcDetailStats.유선.수임율}%</td>
+                  <td className="py-2 md:py-3 px-3 md:px-4 text-muted-foreground hidden sm:table-cell max-w-[200px] truncate">{etcDetailStats.유선.예시}</td>
                 </tr>
                 <tr className="border-b hover:bg-muted/50">
-                  <td className="py-3 px-4">채팅</td>
-                  <td className="text-right py-3 px-4">{etcDetailStats.채팅.문의}건</td>
-                  <td className="text-right py-3 px-4">{etcDetailStats.채팅.수임}건</td>
-                  <td className="text-right py-3 px-4">{etcDetailStats.채팅.수임율}%</td>
-                  <td className="py-3 px-4 text-sm text-muted-foreground">{etcDetailStats.채팅.예시}</td>
+                  <td className="py-2 md:py-3 px-3 md:px-4">채팅</td>
+                  <td className="text-right py-2 md:py-3 px-3 md:px-4">{etcDetailStats.채팅.문의}</td>
+                  <td className="text-right py-2 md:py-3 px-3 md:px-4">{etcDetailStats.채팅.수임}</td>
+                  <td className="text-right py-2 md:py-3 px-3 md:px-4">{etcDetailStats.채팅.수임율}%</td>
+                  <td className="py-2 md:py-3 px-3 md:px-4 text-muted-foreground hidden sm:table-cell max-w-[200px] truncate">{etcDetailStats.채팅.예시}</td>
                 </tr>
                 <tr className="hover:bg-muted/50">
-                  <td className="py-3 px-4">기타</td>
-                  <td className="text-right py-3 px-4">{etcDetailStats.기타.문의}건</td>
-                  <td className="text-right py-3 px-4">{etcDetailStats.기타.수임}건</td>
-                  <td className="text-right py-3 px-4">{etcDetailStats.기타.수임율}%</td>
-                  <td className="py-3 px-4 text-sm text-muted-foreground">{etcDetailStats.기타.예시}</td>
+                  <td className="py-2 md:py-3 px-3 md:px-4">기타</td>
+                  <td className="text-right py-2 md:py-3 px-3 md:px-4">{etcDetailStats.기타.문의}</td>
+                  <td className="text-right py-2 md:py-3 px-3 md:px-4">{etcDetailStats.기타.수임}</td>
+                  <td className="text-right py-2 md:py-3 px-3 md:px-4">{etcDetailStats.기타.수임율}%</td>
+                  <td className="py-2 md:py-3 px-3 md:px-4 text-muted-foreground hidden sm:table-cell max-w-[200px] truncate">{etcDetailStats.기타.예시}</td>
                 </tr>
               </tbody>
             </table>
@@ -539,29 +550,29 @@ export function DetailedMediaPage({ subPage, inquiries, contracts, isDarkMode }:
 
       {/* 문의건X 통계 */}
       <Card>
-        <CardHeader>
-          <CardTitle>문의건X 통계</CardTitle>
-          <CardDescription>문의건으로 카운트되지 않는 항목 (리마인드CRM, 문의외수임, 연락처중복 등)</CardDescription>
+        <CardHeader className="p-3 md:p-6">
+          <CardTitle className="text-base md:text-lg">문의건X 통계</CardTitle>
+          <CardDescription className="text-xs md:text-sm">문의건으로 카운트되지 않는 항목</CardDescription>
         </CardHeader>
-        <CardContent>
-          <div className="overflow-x-auto">
-            <table className="w-full">
+        <CardContent className="p-3 pt-0 md:p-6 md:pt-0">
+          <div className="overflow-x-auto -mx-3 md:mx-0">
+            <table className="w-full min-w-[500px] md:min-w-0">
               <thead>
                 <tr className="border-b">
-                  <th className="text-left py-3 px-4">유형</th>
-                  <th className="text-right py-3 px-4">문의 건수</th>
-                  <th className="text-right py-3 px-4">수임 건수</th>
-                  <th className="text-right py-3 px-4">수임율</th>
-                  <th className="text-left py-3 px-4">세부 매체</th>
+                  <th className="text-left py-2 md:py-3 px-3 md:px-4 text-xs md:text-sm">유형</th>
+                  <th className="text-right py-2 md:py-3 px-3 md:px-4 text-xs md:text-sm">문의</th>
+                  <th className="text-right py-2 md:py-3 px-3 md:px-4 text-xs md:text-sm">수임</th>
+                  <th className="text-right py-2 md:py-3 px-3 md:px-4 text-xs md:text-sm">수임율</th>
+                  <th className="text-left py-2 md:py-3 px-3 md:px-4 text-xs md:text-sm hidden sm:table-cell">세부 매체</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody className="text-xs md:text-sm">
                 <tr className="hover:bg-muted/50">
-                  <td className="py-3 px-4">-</td>
-                  <td className="text-right py-3 px-4">{excludedStats.문의}건</td>
-                  <td className="text-right py-3 px-4">{excludedStats.수임}건</td>
-                  <td className="text-right py-3 px-4">{excludedStats.수임율}%</td>
-                  <td className="py-3 px-4 text-sm text-muted-foreground">{excludedStats.세부매체}</td>
+                  <td className="py-2 md:py-3 px-3 md:px-4">-</td>
+                  <td className="text-right py-2 md:py-3 px-3 md:px-4">{excludedStats.문의}</td>
+                  <td className="text-right py-2 md:py-3 px-3 md:px-4">{excludedStats.수임}</td>
+                  <td className="text-right py-2 md:py-3 px-3 md:px-4">{excludedStats.수임율}%</td>
+                  <td className="py-2 md:py-3 px-3 md:px-4 text-muted-foreground hidden sm:table-cell max-w-[200px] truncate">{excludedStats.세부매체}</td>
                 </tr>
               </tbody>
             </table>
@@ -573,28 +584,28 @@ export function DetailedMediaPage({ subPage, inquiries, contracts, isDarkMode }:
       <Collapsible open={isMediaClassificationOpen} onOpenChange={setIsMediaClassificationOpen}>
         <Card className={`transition-all duration-200 ${!isMediaClassificationOpen ? 'hover:shadow-md hover:border-primary/30' : ''}`}>
           <CollapsibleTrigger asChild>
-            <CardHeader className="cursor-pointer hover:bg-muted/50 transition-colors select-none">
+            <CardHeader className="cursor-pointer hover:bg-muted/50 transition-colors select-none p-3 md:p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <CardTitle>매체 분류 기준 (E열 세부매체)</CardTitle>
-                  <CardDescription>각 매체 카테고리별 세부매체 목록</CardDescription>
+                  <CardTitle className="text-base md:text-lg">매체 분류 기준 (E열 세부매체)</CardTitle>
+                  <CardDescription className="text-xs md:text-sm">각 매체 카테고리별 세부매체 목록</CardDescription>
                 </div>
-                <div className="flex items-center gap-3 text-muted-foreground">
-                  <span className="text-sm font-medium">{isMediaClassificationOpen ? '📂 접기' : '📁 펼치기'}</span>
-                  <ChevronDown className={`h-6 w-6 transition-transform duration-200 ${isMediaClassificationOpen ? 'rotate-180' : ''}`} />
+                <div className="flex items-center gap-2 md:gap-3 text-muted-foreground">
+                  <span className="text-xs md:text-sm font-medium">{isMediaClassificationOpen ? '📂 접기' : '📁 펼치기'}</span>
+                  <ChevronDown className={`h-5 w-5 md:h-6 md:w-6 transition-transform duration-200 ${isMediaClassificationOpen ? 'rotate-180' : ''}`} />
                 </div>
               </div>
             </CardHeader>
           </CollapsibleTrigger>
           <CollapsibleContent>
-            <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <CardContent className="p-3 pt-0 md:p-6 md:pt-0">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
             {/* 홈페이지 · 유료광고 */}
-            <div className="border rounded-lg p-4" style={{ backgroundColor: isDarkMode ? 'rgba(59, 130, 246, 0.1)' : 'rgba(59, 130, 246, 0.05)', borderColor: '#3b82f6' }}>
-              <h3 className="font-bold mb-3 text-center pb-2 border-b" style={{ color: '#3b82f6' }}>
+            <div className="border rounded-lg p-3 md:p-4" style={{ backgroundColor: isDarkMode ? 'rgba(59, 130, 246, 0.1)' : 'rgba(59, 130, 246, 0.05)', borderColor: '#3b82f6' }}>
+              <h3 className="font-bold mb-2 md:mb-3 text-center pb-2 border-b text-sm md:text-base" style={{ color: '#3b82f6' }}>
                 홈페이지 · 유료광고
               </h3>
-              <div className="space-y-1 text-sm">
+              <div className="space-y-0.5 md:space-y-1 text-xs md:text-sm">
                 <div>게시판문의</div>
                 <div>상담신청</div>
                 <div>자가진단</div>
@@ -621,11 +632,11 @@ export function DetailedMediaPage({ subPage, inquiries, contracts, isDarkMode }:
             </div>
 
             {/* 바이럴 */}
-            <div className="border rounded-lg p-4" style={{ backgroundColor: isDarkMode ? 'rgba(16, 185, 129, 0.1)' : 'rgba(16, 185, 129, 0.05)', borderColor: '#10b981' }}>
-              <h3 className="font-bold mb-3 text-center pb-2 border-b" style={{ color: '#10b981' }}>
+            <div className="border rounded-lg p-3 md:p-4" style={{ backgroundColor: isDarkMode ? 'rgba(16, 185, 129, 0.1)' : 'rgba(16, 185, 129, 0.05)', borderColor: '#10b981' }}>
+              <h3 className="font-bold mb-2 md:mb-3 text-center pb-2 border-b text-sm md:text-base" style={{ color: '#10b981' }}>
                 바이럴
               </h3>
-              <div className="space-y-1 text-sm">
+              <div className="space-y-0.5 md:space-y-1 text-xs md:text-sm">
                 <div>shp블로그_6571</div>
                 <div>gem블로그_3678</div>
                 <div>jnin블로그_1016</div>
@@ -694,11 +705,11 @@ export function DetailedMediaPage({ subPage, inquiries, contracts, isDarkMode }:
             </div>
 
             {/* 기타 */}
-            <div className="border rounded-lg p-4" style={{ backgroundColor: isDarkMode ? 'rgba(245, 158, 11, 0.1)' : 'rgba(245, 158, 11, 0.05)', borderColor: '#f59e0b' }}>
-              <h3 className="font-bold mb-3 text-center pb-2 border-b" style={{ color: '#f59e0b' }}>
+            <div className="border rounded-lg p-3 md:p-4" style={{ backgroundColor: isDarkMode ? 'rgba(245, 158, 11, 0.1)' : 'rgba(245, 158, 11, 0.05)', borderColor: '#f59e0b' }}>
+              <h3 className="font-bold mb-2 md:mb-3 text-center pb-2 border-b text-sm md:text-base" style={{ color: '#f59e0b' }}>
                 기타
               </h3>
-              <div className="space-y-1 text-sm">
+              <div className="space-y-0.5 md:space-y-1 text-xs md:text-sm">
                 <div>기타</div>
                 <div>카카오_예약</div>
                 <div>번호추적불가</div>
@@ -713,11 +724,11 @@ export function DetailedMediaPage({ subPage, inquiries, contracts, isDarkMode }:
             </div>
 
             {/* 문의건X */}
-            <div className="border rounded-lg p-4" style={{ backgroundColor: isDarkMode ? 'rgba(139, 92, 246, 0.1)' : 'rgba(139, 92, 246, 0.05)', borderColor: '#8b5cf6' }}>
-              <h3 className="font-bold mb-3 text-center pb-2 border-b" style={{ color: '#8b5cf6' }}>
+            <div className="border rounded-lg p-3 md:p-4" style={{ backgroundColor: isDarkMode ? 'rgba(139, 92, 246, 0.1)' : 'rgba(139, 92, 246, 0.05)', borderColor: '#8b5cf6' }}>
+              <h3 className="font-bold mb-2 md:mb-3 text-center pb-2 border-b text-sm md:text-base" style={{ color: '#8b5cf6' }}>
                 문의건X
               </h3>
-              <div className="space-y-1 text-sm">
+              <div className="space-y-0.5 md:space-y-1 text-xs md:text-sm">
                 <div>연락처중복</div>
                 <div>문의외수임</div>
                 <div>crm메일</div>
@@ -734,12 +745,12 @@ export function DetailedMediaPage({ subPage, inquiries, contracts, isDarkMode }:
       </Collapsible>
 
       {/* 문의건 카운트 로직 (항상 표시) */}
-      <div className="p-4 bg-muted rounded-lg">
-        <h4 className="font-semibold mb-2">📋 문의건 카운트 로직</h4>
-        <ul className="space-y-1 text-sm text-muted-foreground">
-          <li>• <strong>완전 제외:</strong> E열 = "AI응대", "문의건X", "특허관리팀전달" → 카운트 안 함</li>
-          <li>• <strong>중복 제거:</strong> E열 = "리마인드CRM", "연락처중복" → 같은 달 내 H열(전화번호) 중복 시 1건만 카운트</li>
-          <li>• <strong>일반 카운트:</strong> 위 조건에 해당하지 않는 모든 문의건 → 모두 카운트</li>
+      <div className="p-3 md:p-4 bg-muted rounded-lg">
+        <h4 className="font-semibold mb-2 text-sm md:text-base">📋 문의건 카운트 로직</h4>
+        <ul className="space-y-1 text-xs md:text-sm text-muted-foreground">
+          <li>• <strong>완전 제외:</strong> E열 = "AI응대", "문의건X", "특허관리팀전달"</li>
+          <li>• <strong>중복 제거:</strong> E열 = "리마인드CRM", "연락처중복" → 같은 달 내 H열 중복 시 1건</li>
+          <li>• <strong>일반 카운트:</strong> 위 조건 외 모든 문의건</li>
         </ul>
       </div>
     </div>

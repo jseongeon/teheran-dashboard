@@ -81,82 +81,84 @@ export function ContractPage({ subPage, contracts }: ContractPageProps) {
   }
 
   return (
-    <div className="flex-1 space-y-6 p-6">
+    <div className="flex-1 space-y-4 md:space-y-6 p-3 md:p-6">
       <div>
-        <h1 className="text-3xl font-bold tracking-tight">수임 관리</h1>
-        <p className="text-muted-foreground">
+        <h1 className="text-2xl md:text-3xl font-bold tracking-tight">수임 관리</h1>
+        <p className="text-sm md:text-base text-muted-foreground">
           수임 내역 및 계약 현황을 확인하세요
         </p>
       </div>
 
-      <div className="flex gap-2">
+      <div className="flex flex-wrap gap-2">
         {contractTypes.map((type) => (
           <Button
             key={type}
             variant={activeTab === type ? "default" : "outline"}
             onClick={() => setActiveTab(type)}
+            size="sm"
+            className="text-xs md:text-sm"
           >
             {type}
           </Button>
         ))}
       </div>
 
-      <div className="grid gap-4 md:grid-cols-4">
+      <div className="grid gap-3 md:gap-4 grid-cols-2 lg:grid-cols-4">
         <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">총 수임건</CardTitle>
-            <CheckCircle2 className="h-4 w-4 text-muted-foreground" />
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-1 md:pb-2">
+            <CardTitle className="text-xs md:text-sm font-medium">총 수임건</CardTitle>
+            <CheckCircle2 className="h-3 w-3 md:h-4 md:w-4 text-muted-foreground" />
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{totalStats.totalContracts.toLocaleString()}</div>
-            <p className="text-xs text-muted-foreground">
+          <CardContent className="pt-0">
+            <div className="text-xl md:text-2xl font-bold">{totalStats.totalContracts.toLocaleString()}</div>
+            <p className="text-[10px] md:text-xs text-muted-foreground">
               전체 수임 건수
             </p>
           </CardContent>
         </Card>
 
         <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">매체 수임건</CardTitle>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-1 md:pb-2">
+            <CardTitle className="text-xs md:text-sm font-medium">매체 수임건</CardTitle>
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{totalStats.mediaContracts.toLocaleString()}</div>
-            <p className="text-xs text-muted-foreground">
+          <CardContent className="pt-0">
+            <div className="text-xl md:text-2xl font-bold">{totalStats.mediaContracts.toLocaleString()}</div>
+            <p className="text-[10px] md:text-xs text-muted-foreground">
               {activeTab} 매체 수임
             </p>
           </CardContent>
         </Card>
 
         <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">분야별 수임 차지율</CardTitle>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-1 md:pb-2">
+            <CardTitle className="text-xs md:text-sm font-medium">분야별 수임 차지율</CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="pt-0">
             <div className="space-y-1">
               {totalStats.topFields.length > 0 ? (
                 totalStats.topFields.map((field, idx) => (
                   <div key={idx} className="flex items-center justify-between">
-                    <span className="text-sm text-muted-foreground">{field.field}</span>
-                    <span className="text-sm font-medium">{field.percentage}%</span>
+                    <span className="text-[10px] md:text-sm text-muted-foreground">{field.field}</span>
+                    <span className="text-[10px] md:text-sm font-medium">{field.percentage}%</span>
                   </div>
                 ))
               ) : (
-                <p className="text-sm text-muted-foreground">데이터 없음</p>
+                <p className="text-[10px] md:text-sm text-muted-foreground">데이터 없음</p>
               )}
             </div>
           </CardContent>
         </Card>
 
         <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">평균 수임금액</CardTitle>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-1 md:pb-2">
+            <CardTitle className="text-xs md:text-sm font-medium">평균 수임금액</CardTitle>
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">
-              ₩{filteredContracts.length > 0 
+          <CardContent className="pt-0">
+            <div className="text-lg md:text-2xl font-bold">
+              ₩{filteredContracts.length > 0
                 ? Math.floor(
                     filteredContracts.reduce((sum, c) => {
-                      const amount = typeof c.amount === 'string' 
+                      const amount = typeof c.amount === 'string'
                         ? parseInt(c.amount.replace(/,/g, '')) || 0
                         : c.amount || 0
                       return sum + amount
@@ -165,7 +167,7 @@ export function ContractPage({ subPage, contracts }: ContractPageProps) {
                 : '0'
               }
             </div>
-            <p className="text-xs text-muted-foreground">
+            <p className="text-[10px] md:text-xs text-muted-foreground">
               건당 평균 금액
             </p>
           </CardContent>
@@ -173,55 +175,57 @@ export function ContractPage({ subPage, contracts }: ContractPageProps) {
       </div>
 
       <Card>
-        <CardHeader>
-          <CardTitle>{activeTab} 수임 내역</CardTitle>
-          <CardDescription>최근 수임 계약 내역을 확인하세요</CardDescription>
+        <CardHeader className="p-3 md:p-6">
+          <CardTitle className="text-base md:text-lg">{activeTab} 수임 내역</CardTitle>
+          <CardDescription className="text-xs md:text-sm">최근 수임 계약 내역을 확인하세요</CardDescription>
         </CardHeader>
-        <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>수임번호</TableHead>
-                <TableHead>문의날짜</TableHead>
-                <TableHead>수임날짜</TableHead>
-                <TableHead>시간</TableHead>
-                <TableHead>분야</TableHead>
-                <TableHead>성함</TableHead>
-                <TableHead>연락처</TableHead>
-                <TableHead className="max-w-[200px]">이메일</TableHead>
-                <TableHead>담당 변리사</TableHead>
-                <TableHead>수임금액</TableHead>
-                <TableHead>상태</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {filteredContracts.length > 0 ? (
-                filteredContracts.map((contract) => (
-                  <TableRow key={contract.id}>
-                    <TableCell>{contract.id}</TableCell>
-                    <TableCell>{contract.inquiryDate || contract.date}</TableCell>
-                    <TableCell>{contract.contractDate || '-'}</TableCell>
-                    <TableCell>{contract.time || '-'}</TableCell>
-                    <TableCell>{contract.type || '-'}</TableCell>
-                    <TableCell>{contract.customerName || '-'}</TableCell>
-                    <TableCell>{contract.phone || '-'}</TableCell>
-                    <TableCell className="max-w-[200px] truncate" title={contract.email || '-'}>
-                      {contract.email || '-'}
-                    </TableCell>
-                    <TableCell>{contract.attorney ? `${contract.attorney} 변리사님` : '-'}</TableCell>
-                    <TableCell>{contract.amount ? `₩${contract.amount.toLocaleString()}` : '-'}</TableCell>
-                    <TableCell>{getStatusBadge(contract.status)}</TableCell>
-                  </TableRow>
-                ))
-              ) : (
+        <CardContent className="p-0 md:p-6 md:pt-0">
+          <div className="overflow-x-auto">
+            <Table>
+              <TableHeader>
                 <TableRow>
-                  <TableCell colSpan={11} className="text-center text-muted-foreground py-8">
-                    {activeTab} 출처의 수임 데이터가 없습니다.
-                  </TableCell>
+                  <TableHead className="text-xs md:text-sm whitespace-nowrap">수임번호</TableHead>
+                  <TableHead className="text-xs md:text-sm whitespace-nowrap hidden sm:table-cell">문의날짜</TableHead>
+                  <TableHead className="text-xs md:text-sm whitespace-nowrap">수임날짜</TableHead>
+                  <TableHead className="text-xs md:text-sm whitespace-nowrap hidden lg:table-cell">시간</TableHead>
+                  <TableHead className="text-xs md:text-sm whitespace-nowrap">분야</TableHead>
+                  <TableHead className="text-xs md:text-sm whitespace-nowrap">성함</TableHead>
+                  <TableHead className="text-xs md:text-sm whitespace-nowrap hidden md:table-cell">연락처</TableHead>
+                  <TableHead className="text-xs md:text-sm whitespace-nowrap hidden lg:table-cell max-w-[200px]">이메일</TableHead>
+                  <TableHead className="text-xs md:text-sm whitespace-nowrap hidden md:table-cell">담당 변리사</TableHead>
+                  <TableHead className="text-xs md:text-sm whitespace-nowrap">수임금액</TableHead>
+                  <TableHead className="text-xs md:text-sm whitespace-nowrap hidden sm:table-cell">상태</TableHead>
                 </TableRow>
-              )}
-            </TableBody>
-          </Table>
+              </TableHeader>
+              <TableBody>
+                {filteredContracts.length > 0 ? (
+                  filteredContracts.map((contract) => (
+                    <TableRow key={contract.id}>
+                      <TableCell className="text-xs md:text-sm whitespace-nowrap">{contract.id}</TableCell>
+                      <TableCell className="text-xs md:text-sm whitespace-nowrap hidden sm:table-cell">{contract.inquiryDate || contract.date}</TableCell>
+                      <TableCell className="text-xs md:text-sm whitespace-nowrap">{contract.contractDate || '-'}</TableCell>
+                      <TableCell className="text-xs md:text-sm whitespace-nowrap hidden lg:table-cell">{contract.time || '-'}</TableCell>
+                      <TableCell className="text-xs md:text-sm whitespace-nowrap">{contract.type || '-'}</TableCell>
+                      <TableCell className="text-xs md:text-sm whitespace-nowrap">{contract.customerName || '-'}</TableCell>
+                      <TableCell className="text-xs md:text-sm whitespace-nowrap hidden md:table-cell">{contract.phone || '-'}</TableCell>
+                      <TableCell className="text-xs md:text-sm hidden lg:table-cell max-w-[200px] truncate" title={contract.email || '-'}>
+                        {contract.email || '-'}
+                      </TableCell>
+                      <TableCell className="text-xs md:text-sm whitespace-nowrap hidden md:table-cell">{contract.attorney ? `${contract.attorney} 변리사님` : '-'}</TableCell>
+                      <TableCell className="text-xs md:text-sm whitespace-nowrap">{contract.amount ? `₩${contract.amount.toLocaleString()}` : '-'}</TableCell>
+                      <TableCell className="text-xs md:text-sm hidden sm:table-cell">{getStatusBadge(contract.status)}</TableCell>
+                    </TableRow>
+                  ))
+                ) : (
+                  <TableRow>
+                    <TableCell colSpan={11} className="text-center text-muted-foreground py-6 md:py-8 text-xs md:text-sm">
+                      {activeTab} 출처의 수임 데이터가 없습니다.
+                    </TableCell>
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          </div>
         </CardContent>
       </Card>
     </div>

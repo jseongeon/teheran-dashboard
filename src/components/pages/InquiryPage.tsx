@@ -72,70 +72,72 @@ export function InquiryPage({ subPage, inquiries }: InquiryPageProps) {
   }
 
   return (
-    <div className="flex-1 space-y-6 p-6">
+    <div className="flex-1 space-y-4 md:space-y-6 p-3 md:p-6">
       <div>
-        <h1 className="text-3xl font-bold tracking-tight">문의 관리</h1>
-        <p className="text-muted-foreground">
+        <h1 className="text-2xl md:text-3xl font-bold tracking-tight">문의 관리</h1>
+        <p className="text-sm md:text-base text-muted-foreground">
           고객 문의 내역을 확인하고 관리하세요
         </p>
       </div>
 
-      <div className="flex gap-2">
+      <div className="flex flex-wrap gap-2">
         {inquiryTypes.map((type) => (
           <Button
             key={type}
             variant={activeTab === type ? "default" : "outline"}
             onClick={() => setActiveTab(type)}
+            size="sm"
+            className="text-xs md:text-sm"
           >
             {type}
           </Button>
         ))}
       </div>
 
-      <div className="grid gap-4 md:grid-cols-4">
+      <div className="grid gap-3 md:gap-4 grid-cols-2 lg:grid-cols-4">
         <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">총 문의건</CardTitle>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-1 md:pb-2">
+            <CardTitle className="text-xs md:text-sm font-medium">총 문의건</CardTitle>
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{totalStats.totalInquiries.toLocaleString()}</div>
-            <p className="text-xs text-muted-foreground">
+          <CardContent className="pt-0">
+            <div className="text-xl md:text-2xl font-bold">{totalStats.totalInquiries.toLocaleString()}</div>
+            <p className="text-[10px] md:text-xs text-muted-foreground">
               전체 문의 건수
             </p>
           </CardContent>
         </Card>
 
         <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">매체 문의건</CardTitle>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-1 md:pb-2">
+            <CardTitle className="text-xs md:text-sm font-medium">매체 문의건</CardTitle>
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{totalStats.mediaInquiries.toLocaleString()}</div>
-            <p className="text-xs text-muted-foreground">
+          <CardContent className="pt-0">
+            <div className="text-xl md:text-2xl font-bold">{totalStats.mediaInquiries.toLocaleString()}</div>
+            <p className="text-[10px] md:text-xs text-muted-foreground">
               {activeTab} 매체 문의
             </p>
           </CardContent>
         </Card>
 
         <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">수임 완료</CardTitle>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-1 md:pb-2">
+            <CardTitle className="text-xs md:text-sm font-medium">수임 완료</CardTitle>
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{totalStats.completedContracts.toLocaleString()}</div>
-            <p className="text-xs text-muted-foreground">
+          <CardContent className="pt-0">
+            <div className="text-xl md:text-2xl font-bold">{totalStats.completedContracts.toLocaleString()}</div>
+            <p className="text-[10px] md:text-xs text-muted-foreground">
               수임으로 전환된 건
             </p>
           </CardContent>
         </Card>
 
         <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">수임률</CardTitle>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-1 md:pb-2">
+            <CardTitle className="text-xs md:text-sm font-medium">수임률</CardTitle>
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{totalStats.contractRate}%</div>
-            <p className="text-xs text-muted-foreground">
+          <CardContent className="pt-0">
+            <div className="text-xl md:text-2xl font-bold">{totalStats.contractRate}%</div>
+            <p className="text-[10px] md:text-xs text-muted-foreground">
               문의 대비 수임 비율
             </p>
           </CardContent>
@@ -143,55 +145,57 @@ export function InquiryPage({ subPage, inquiries }: InquiryPageProps) {
       </div>
 
       <Card>
-        <CardHeader>
-          <CardTitle>{activeTab} 문의 내역</CardTitle>
-          <CardDescription>최근 문의 내역을 확인하세요</CardDescription>
+        <CardHeader className="p-3 md:p-6">
+          <CardTitle className="text-base md:text-lg">{activeTab} 문의 내역</CardTitle>
+          <CardDescription className="text-xs md:text-sm">최근 문의 내역을 확인하세요</CardDescription>
         </CardHeader>
-        <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>문의번호</TableHead>
-                <TableHead>날짜</TableHead>
-                <TableHead>시간</TableHead>
-                <TableHead>분야</TableHead>
-                <TableHead>성함</TableHead>
-                <TableHead>연락처</TableHead>
-                <TableHead className="max-w-[200px]">이메일</TableHead>
-                <TableHead>담당 변리사</TableHead>
-                <TableHead>리마인드</TableHead>
-                <TableHead>상태</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {filteredInquiries.length > 0 ? (
-                filteredInquiries.map((inquiry) => (
-                  <TableRow key={inquiry.id}>
-                    <TableCell>{inquiry.id}</TableCell>
-                    <TableCell>{inquiry.date}</TableCell>
-                    <TableCell>{inquiry.time || '-'}</TableCell>
-                    <TableCell>{inquiry.type || '-'}</TableCell>
-                    <TableCell>{inquiry.customerName || '-'}</TableCell>
-                    <TableCell>{inquiry.phone || '-'}</TableCell>
-                    <TableCell className="max-w-[200px] truncate" title={inquiry.email || '-'}>
-                      {inquiry.email || '-'}
-                    </TableCell>
-                    <TableCell>{inquiry.attorney ? `${inquiry.attorney} 변리사님` : '-'}</TableCell>
-                    <TableCell>
-                      {inquiry.isReminder ? 'True' : 'False'}
-                    </TableCell>
-                    <TableCell>{getStatusBadge(inquiry.status)}</TableCell>
-                  </TableRow>
-                ))
-              ) : (
+        <CardContent className="p-0 md:p-6 md:pt-0">
+          <div className="overflow-x-auto">
+            <Table>
+              <TableHeader>
                 <TableRow>
-                  <TableCell colSpan={10} className="text-center text-muted-foreground py-8">
-                    {activeTab} 출처의 문의 데이터가 없습니다.
-                  </TableCell>
+                  <TableHead className="text-xs md:text-sm whitespace-nowrap">문의번호</TableHead>
+                  <TableHead className="text-xs md:text-sm whitespace-nowrap">날짜</TableHead>
+                  <TableHead className="text-xs md:text-sm whitespace-nowrap hidden sm:table-cell">시간</TableHead>
+                  <TableHead className="text-xs md:text-sm whitespace-nowrap">분야</TableHead>
+                  <TableHead className="text-xs md:text-sm whitespace-nowrap">성함</TableHead>
+                  <TableHead className="text-xs md:text-sm whitespace-nowrap hidden md:table-cell">연락처</TableHead>
+                  <TableHead className="text-xs md:text-sm whitespace-nowrap hidden lg:table-cell max-w-[200px]">이메일</TableHead>
+                  <TableHead className="text-xs md:text-sm whitespace-nowrap hidden md:table-cell">담당 변리사</TableHead>
+                  <TableHead className="text-xs md:text-sm whitespace-nowrap hidden lg:table-cell">리마인드</TableHead>
+                  <TableHead className="text-xs md:text-sm whitespace-nowrap">상태</TableHead>
                 </TableRow>
-              )}
-            </TableBody>
-          </Table>
+              </TableHeader>
+              <TableBody>
+                {filteredInquiries.length > 0 ? (
+                  filteredInquiries.map((inquiry) => (
+                    <TableRow key={inquiry.id}>
+                      <TableCell className="text-xs md:text-sm whitespace-nowrap">{inquiry.id}</TableCell>
+                      <TableCell className="text-xs md:text-sm whitespace-nowrap">{inquiry.date}</TableCell>
+                      <TableCell className="text-xs md:text-sm whitespace-nowrap hidden sm:table-cell">{inquiry.time || '-'}</TableCell>
+                      <TableCell className="text-xs md:text-sm whitespace-nowrap">{inquiry.type || '-'}</TableCell>
+                      <TableCell className="text-xs md:text-sm whitespace-nowrap">{inquiry.customerName || '-'}</TableCell>
+                      <TableCell className="text-xs md:text-sm whitespace-nowrap hidden md:table-cell">{inquiry.phone || '-'}</TableCell>
+                      <TableCell className="text-xs md:text-sm hidden lg:table-cell max-w-[200px] truncate" title={inquiry.email || '-'}>
+                        {inquiry.email || '-'}
+                      </TableCell>
+                      <TableCell className="text-xs md:text-sm whitespace-nowrap hidden md:table-cell">{inquiry.attorney ? `${inquiry.attorney} 변리사님` : '-'}</TableCell>
+                      <TableCell className="text-xs md:text-sm whitespace-nowrap hidden lg:table-cell">
+                        {inquiry.isReminder ? 'True' : 'False'}
+                      </TableCell>
+                      <TableCell className="text-xs md:text-sm">{getStatusBadge(inquiry.status)}</TableCell>
+                    </TableRow>
+                  ))
+                ) : (
+                  <TableRow>
+                    <TableCell colSpan={10} className="text-center text-muted-foreground py-6 md:py-8 text-xs md:text-sm">
+                      {activeTab} 출처의 문의 데이터가 없습니다.
+                    </TableCell>
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          </div>
         </CardContent>
       </Card>
     </div>

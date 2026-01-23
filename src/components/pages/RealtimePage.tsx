@@ -230,78 +230,78 @@ export function RealtimePage({ inquiries, contracts }: RealtimePageProps) {
   }, [inquiries, today, thisMonthStart, thisMonthEnd])
   
   return (
-    <div className="flex-1 space-y-6 p-6">
+    <div className="flex-1 space-y-4 md:space-y-6 p-3 md:p-6">
       <div>
-        <h1 className="text-3xl font-bold tracking-tight">실시간 현황</h1>
-        <p className="text-muted-foreground">
+        <h1 className="text-2xl md:text-3xl font-bold tracking-tight">실시간 현황</h1>
+        <p className="text-sm md:text-base text-muted-foreground">
           실시간으로 발생하는 문의 및 수임 현황을 확인하세요
         </p>
       </div>
 
-      <div className="grid gap-4 md:grid-cols-3">
+      <div className="grid gap-3 md:gap-4 grid-cols-3">
         <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">금일 문의건</CardTitle>
-            <Activity className="h-4 w-4 text-muted-foreground" />
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-1 md:pb-2 p-3 md:p-6">
+            <CardTitle className="text-xs md:text-sm font-medium">금일 문의건</CardTitle>
+            <Activity className="h-3 w-3 md:h-4 md:w-4 text-muted-foreground" />
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{todayInquiries}</div>
-            <p className="text-xs text-muted-foreground">
+          <CardContent className="p-3 md:p-6 pt-0">
+            <div className="text-xl md:text-2xl font-bold">{todayInquiries}</div>
+            <p className="text-[10px] md:text-xs text-muted-foreground">
               오늘 등록된 문의
             </p>
           </CardContent>
         </Card>
-        
+
         <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">월 수임건</CardTitle>
-            <Users className="h-4 w-4 text-muted-foreground" />
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-1 md:pb-2 p-3 md:p-6">
+            <CardTitle className="text-xs md:text-sm font-medium">월 수임건</CardTitle>
+            <Users className="h-3 w-3 md:h-4 md:w-4 text-muted-foreground" />
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{monthlyContracts}</div>
-            <p className="text-xs text-muted-foreground">
+          <CardContent className="p-3 md:p-6 pt-0">
+            <div className="text-xl md:text-2xl font-bold">{monthlyContracts}</div>
+            <p className="text-[10px] md:text-xs text-muted-foreground">
               이번 달 수임
             </p>
           </CardContent>
         </Card>
-        
+
         <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">월 방문상담건</CardTitle>
-            <TrendingUp className="h-4 w-4 text-muted-foreground" />
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-1 md:pb-2 p-3 md:p-6">
+            <CardTitle className="text-xs md:text-sm font-medium">월 방문상담건</CardTitle>
+            <TrendingUp className="h-3 w-3 md:h-4 md:w-4 text-muted-foreground" />
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{monthlyVisits}</div>
-            <p className="text-xs text-muted-foreground">
-              이번  방문/출장 상담
+          <CardContent className="p-3 md:p-6 pt-0">
+            <div className="text-xl md:text-2xl font-bold">{monthlyVisits}</div>
+            <p className="text-[10px] md:text-xs text-muted-foreground">
+              이번 달 방문/출장 상담
             </p>
           </CardContent>
         </Card>
       </div>
 
-      <div className="grid gap-4 md:grid-cols-2">
+      <div className="grid gap-3 md:gap-4 grid-cols-1 md:grid-cols-2">
         <Card>
-          <CardHeader>
-            <CardTitle>최근 상담 접수 내역</CardTitle>
-            <CardDescription>오늘 등록된 상담 접수</CardDescription>
+          <CardHeader className="p-3 md:p-6">
+            <CardTitle className="text-base md:text-lg">최근 상담 접수 내역</CardTitle>
+            <CardDescription className="text-xs md:text-sm">오늘 등록된 상담 접수</CardDescription>
           </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
+          <CardContent className="p-3 md:p-6 pt-0">
+            <div className="space-y-3 md:space-y-4">
               {recentInquiries.length > 0 ? (
                 recentInquiries.map((item, i) => (
-                  <div key={i} className="flex items-start gap-3 pb-3 border-b last:border-0">
-                    <div className="w-2 h-2 mt-2 rounded-full bg-blue-500" />
-                    <div className="flex-1">
-                      <div className="flex items-center justify-between">
-                        <p className="font-medium">새로운 문의</p>
-                        <span className="text-xs text-muted-foreground">{item.time}</span>
+                  <div key={i} className="flex items-start gap-2 md:gap-3 pb-2 md:pb-3 border-b last:border-0">
+                    <div className="w-1.5 h-1.5 md:w-2 md:h-2 mt-1.5 md:mt-2 rounded-full bg-blue-500 flex-shrink-0" />
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center justify-between gap-2">
+                        <p className="font-medium text-sm md:text-base">새로운 문의</p>
+                        <span className="text-[10px] md:text-xs text-muted-foreground whitespace-nowrap">{item.time}</span>
                       </div>
-                      <p className="text-sm text-muted-foreground">{item.detail}</p>
+                      <p className="text-xs md:text-sm text-muted-foreground break-words">{item.detail}</p>
                     </div>
                   </div>
                 ))
               ) : (
-                <p className="text-sm text-muted-foreground text-center py-8">
+                <p className="text-xs md:text-sm text-muted-foreground text-center py-6 md:py-8">
                   오늘 등록된 상담 접수 내역이 없습니다.
                 </p>
               )}
@@ -310,27 +310,27 @@ export function RealtimePage({ inquiries, contracts }: RealtimePageProps) {
         </Card>
 
         <Card>
-          <CardHeader>
-            <CardTitle>최근 수임 완료 내역</CardTitle>
-            <CardDescription>오늘 수임 완료된 건</CardDescription>
+          <CardHeader className="p-3 md:p-6">
+            <CardTitle className="text-base md:text-lg">최근 수임 완료 내역</CardTitle>
+            <CardDescription className="text-xs md:text-sm">오늘 수임 완료된 건</CardDescription>
           </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
+          <CardContent className="p-3 md:p-6 pt-0">
+            <div className="space-y-3 md:space-y-4">
               {recentContracts.length > 0 ? (
                 recentContracts.map((item, i) => (
-                  <div key={i} className="flex items-start gap-3 pb-3 border-b last:border-0">
-                    <div className="w-2 h-2 mt-2 rounded-full bg-green-500" />
-                    <div className="flex-1">
-                      <div className="flex items-center justify-between">
-                        <p className="font-medium">수임 완료</p>
-                        <span className="text-xs text-muted-foreground">{item.time}</span>
+                  <div key={i} className="flex items-start gap-2 md:gap-3 pb-2 md:pb-3 border-b last:border-0">
+                    <div className="w-1.5 h-1.5 md:w-2 md:h-2 mt-1.5 md:mt-2 rounded-full bg-green-500 flex-shrink-0" />
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center justify-between gap-2">
+                        <p className="font-medium text-sm md:text-base">수임 완료</p>
+                        <span className="text-[10px] md:text-xs text-muted-foreground whitespace-nowrap">{item.time}</span>
                       </div>
-                      <p className="text-sm text-muted-foreground">{item.detail}</p>
+                      <p className="text-xs md:text-sm text-muted-foreground break-words">{item.detail}</p>
                     </div>
                   </div>
                 ))
               ) : (
-                <p className="text-sm text-muted-foreground text-center py-8">
+                <p className="text-xs md:text-sm text-muted-foreground text-center py-6 md:py-8">
                   오늘 수임 완료된 내역이 없습니다.
                 </p>
               )}

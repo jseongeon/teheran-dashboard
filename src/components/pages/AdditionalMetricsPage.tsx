@@ -215,43 +215,43 @@ export function AdditionalMetricsPage({ subPage, attorneyStats, fieldStats, inqu
     switch (activeTab) {
       case "변리사님별 현황":
         return (
-          <div className="space-y-6">
-            <div className="grid gap-4 md:grid-cols-4">
+          <div className="space-y-4 md:space-y-6">
+            <div className="grid gap-3 md:gap-4 grid-cols-2 lg:grid-cols-4">
               {filteredAttorneyStats.map((attorney) => (
                 <Card key={attorney.name}>
-                  <CardHeader>
-                    <CardTitle>{attorney.name === "상담완료" ? "상담완료" : `${attorney.name} 변리사님`}</CardTitle>
+                  <CardHeader className="p-3 md:p-6">
+                    <CardTitle className="text-sm md:text-base truncate">{attorney.name === "상담완료" ? "상담완료" : `${attorney.name} 변리사님`}</CardTitle>
                   </CardHeader>
-                  <CardContent className="space-y-2">
+                  <CardContent className="space-y-2 p-3 pt-0 md:p-6 md:pt-0">
                     <div>
-                      <p className="text-sm text-muted-foreground">문의건</p>
-                      <p className="text-2xl font-bold">{attorney.inquiries}</p>
+                      <p className="text-xs md:text-sm text-muted-foreground">문의건</p>
+                      <p className="text-xl md:text-2xl font-bold">{attorney.inquiries}</p>
                     </div>
                     <div>
-                      <p className="text-sm text-muted-foreground">수임건</p>
-                      <p className="text-2xl font-bold">{attorney.contracts}</p>
+                      <p className="text-xs md:text-sm text-muted-foreground">수임건</p>
+                      <p className="text-xl md:text-2xl font-bold">{attorney.contracts}</p>
                     </div>
                     <div>
-                      <p className="text-sm text-muted-foreground">수임율</p>
-                      <p className="text-2xl font-bold">{attorney.rate}%</p>
+                      <p className="text-xs md:text-sm text-muted-foreground">수임율</p>
+                      <p className="text-xl md:text-2xl font-bold">{attorney.rate}%</p>
                     </div>
                   </CardContent>
                 </Card>
               ))}
             </div>
             <Card>
-              <CardHeader>
-                <CardTitle>변리사님별 실적 비교</CardTitle>
-                <CardDescription>문의건 및 수임건 비교</CardDescription>
+              <CardHeader className="p-3 md:p-6">
+                <CardTitle className="text-base md:text-lg">변리사님별 실적 비교</CardTitle>
+                <CardDescription className="text-xs md:text-sm">문의건 및 수임건 비교</CardDescription>
               </CardHeader>
-              <CardContent>
-                <ResponsiveContainer width="100%" height={300}>
+              <CardContent className="p-3 pt-0 md:p-6 md:pt-0">
+                <ResponsiveContainer width="100%" height={250} className="md:!h-[300px]">
                   <BarChart data={filteredAttorneyStats}>
                     <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="name" />
-                    <YAxis />
+                    <XAxis dataKey="name" tick={{ fontSize: 10 }} />
+                    <YAxis tick={{ fontSize: 10 }} />
                     <Tooltip contentStyle={tooltipStyle} itemStyle={tooltipItemStyle} labelStyle={tooltipItemStyle} />
-                    <Legend />
+                    <Legend wrapperStyle={{ fontSize: '12px' }} />
                     <Bar dataKey="inquiries" fill="#3b82f6" name="문의건" />
                     <Bar dataKey="contracts" fill="#10b981" name="수임건" />
                   </BarChart>
@@ -263,23 +263,23 @@ export function AdditionalMetricsPage({ subPage, attorneyStats, fieldStats, inqu
 
       case "분야별 현황":
         return (
-          <div className="space-y-6">
-            <div className="grid gap-4 md:grid-cols-2">
+          <div className="space-y-4 md:space-y-6">
+            <div className="grid gap-3 md:gap-4 grid-cols-1 lg:grid-cols-2">
               <Card>
-                <CardHeader>
-                  <CardTitle>분야별 문의 분포</CardTitle>
-                  <CardDescription>각 분야별 문의 비중</CardDescription>
+                <CardHeader className="p-3 md:p-6">
+                  <CardTitle className="text-base md:text-lg">분야별 문의 분포</CardTitle>
+                  <CardDescription className="text-xs md:text-sm">각 분야별 문의 비중</CardDescription>
                 </CardHeader>
-                <CardContent>
-                  <ResponsiveContainer width="100%" height={300}>
+                <CardContent className="p-3 pt-0 md:p-6 md:pt-0">
+                  <ResponsiveContainer width="100%" height={250} className="md:!h-[300px]">
                     <PieChart>
                       <Pie
                         data={filteredFieldStats}
                         cx="50%"
                         cy="50%"
                         labelLine={false}
-                        label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
-                        outerRadius={80}
+                        label={({ percent }) => `${(percent * 100).toFixed(0)}%`}
+                        outerRadius={60}
                         fill="#8884d8"
                         dataKey="value"
                       >
@@ -288,25 +288,26 @@ export function AdditionalMetricsPage({ subPage, attorneyStats, fieldStats, inqu
                         ))}
                       </Pie>
                       <Tooltip contentStyle={tooltipStyle} itemStyle={tooltipItemStyle} labelStyle={tooltipItemStyle} />
+                      <Legend wrapperStyle={{ fontSize: '11px' }} />
                     </PieChart>
                   </ResponsiveContainer>
                 </CardContent>
               </Card>
               <Card>
-                <CardHeader>
-                  <CardTitle>분야별 상세 통계</CardTitle>
-                  <CardDescription>각 분야별 건수</CardDescription>
+                <CardHeader className="p-3 md:p-6">
+                  <CardTitle className="text-base md:text-lg">분야별 상세 통계</CardTitle>
+                  <CardDescription className="text-xs md:text-sm">각 분야별 건수</CardDescription>
                 </CardHeader>
-                <CardContent>
-                  <div className="space-y-3">
+                <CardContent className="p-3 pt-0 md:p-6 md:pt-0">
+                  <div className="space-y-2 md:space-y-3">
                     {filteredFieldStats.map((field) => (
-                      <div key={field.name} className="flex items-center justify-between">
+                      <div key={field.name} className="flex items-center justify-between text-sm md:text-base">
                         <div className="flex items-center gap-2">
-                          <div 
-                            className="w-3 h-3 rounded-full" 
+                          <div
+                            className="w-2 h-2 md:w-3 md:h-3 rounded-full flex-shrink-0"
                             style={{ backgroundColor: field.color }}
                           />
-                          <span>{field.name}</span>
+                          <span className="truncate">{field.name}</span>
                         </div>
                         <span className="font-bold">{field.value}</span>
                       </div>
@@ -321,18 +322,18 @@ export function AdditionalMetricsPage({ subPage, attorneyStats, fieldStats, inqu
       case "업무시간 현황":
         return (
           <Card>
-            <CardHeader>
-              <CardTitle>시간대별 업무 현황</CardTitle>
-              <CardDescription>업무 시간(09:00-18:00) 동안의 활동</CardDescription>
+            <CardHeader className="p-3 md:p-6">
+              <CardTitle className="text-base md:text-lg">시간대별 업무 현황</CardTitle>
+              <CardDescription className="text-xs md:text-sm">업무 시간(09:00-18:00) 동안의 활동</CardDescription>
             </CardHeader>
-            <CardContent>
-              <ResponsiveContainer width="100%" height={400}>
+            <CardContent className="p-3 pt-0 md:p-6 md:pt-0">
+              <ResponsiveContainer width="100%" height={280} className="md:!h-[400px]">
                 <BarChart data={workHoursData}>
                   <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="hour" />
-                  <YAxis />
+                  <XAxis dataKey="hour" tick={{ fontSize: 10 }} />
+                  <YAxis tick={{ fontSize: 10 }} />
                   <Tooltip contentStyle={tooltipStyle} itemStyle={tooltipItemStyle} labelStyle={tooltipItemStyle} />
-                  <Legend />
+                  <Legend wrapperStyle={{ fontSize: '12px' }} />
                   <Bar dataKey="count" fill="#3b82f6" name="문의 건수" />
                 </BarChart>
               </ResponsiveContainer>
@@ -343,18 +344,18 @@ export function AdditionalMetricsPage({ subPage, attorneyStats, fieldStats, inqu
       case "업무외시간 현황":
         return (
           <Card>
-            <CardHeader>
-              <CardTitle>시간외 업무 현황</CardTitle>
-              <CardDescription>업무 시간 외(18:00 이후) 활동</CardDescription>
+            <CardHeader className="p-3 md:p-6">
+              <CardTitle className="text-base md:text-lg">시간외 업무 현황</CardTitle>
+              <CardDescription className="text-xs md:text-sm">업무 시간 외(18:00 이후) 활동</CardDescription>
             </CardHeader>
-            <CardContent>
-              <ResponsiveContainer width="100%" height={400}>
+            <CardContent className="p-3 pt-0 md:p-6 md:pt-0">
+              <ResponsiveContainer width="100%" height={280} className="md:!h-[400px]">
                 <BarChart data={afterHoursData}>
                   <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="hour" />
-                  <YAxis />
+                  <XAxis dataKey="hour" tick={{ fontSize: 10 }} />
+                  <YAxis tick={{ fontSize: 10 }} />
                   <Tooltip contentStyle={tooltipStyle} itemStyle={tooltipItemStyle} labelStyle={tooltipItemStyle} />
-                  <Legend />
+                  <Legend wrapperStyle={{ fontSize: '12px' }} />
                   <Bar dataKey="count" fill="#ef4444" name="문의 건수" />
                 </BarChart>
               </ResponsiveContainer>
@@ -368,20 +369,22 @@ export function AdditionalMetricsPage({ subPage, attorneyStats, fieldStats, inqu
   }
 
   return (
-    <div className="flex-1 space-y-6 p-6">
+    <div className="flex-1 space-y-4 md:space-y-6 p-3 md:p-6">
       <div>
-        <h1 className="text-3xl font-bold tracking-tight">추가 지표</h1>
-        <p className="text-muted-foreground">
+        <h1 className="text-2xl md:text-3xl font-bold tracking-tight">추가 지표</h1>
+        <p className="text-sm md:text-base text-muted-foreground">
           상세한 업무 현황 지표를 확인하세요
         </p>
       </div>
 
-      <div className="flex gap-2 flex-wrap">
+      <div className="flex gap-1.5 md:gap-2 flex-wrap">
         {metricTypes.map((type) => (
           <Button
             key={type}
             variant={activeTab === type ? "default" : "outline"}
             onClick={() => setActiveTab(type)}
+            size="sm"
+            className="text-xs md:text-sm"
           >
             {type}
           </Button>
@@ -389,11 +392,11 @@ export function AdditionalMetricsPage({ subPage, attorneyStats, fieldStats, inqu
       </div>
 
       <div className="flex gap-2 flex-wrap">
-        <div className="flex items-center gap-2">
-          <Calendar className="w-5 h-5 text-muted-foreground" />
+        <div className="flex items-center gap-1.5 md:gap-2">
+          <Calendar className="w-4 h-4 md:w-5 md:h-5 text-muted-foreground" />
           <Select value={selectedYear.toString()} onValueChange={value => setSelectedYear(parseInt(value))}>
-            <SelectTrigger className="w-40">
-              <SelectValue placeholder="연도 선택" />
+            <SelectTrigger className="w-24 md:w-40 h-8 md:h-10 text-xs md:text-sm">
+              <SelectValue placeholder="연도" />
             </SelectTrigger>
             <SelectContent>
               {availableYears.map(year => (
@@ -402,8 +405,8 @@ export function AdditionalMetricsPage({ subPage, attorneyStats, fieldStats, inqu
             </SelectContent>
           </Select>
           <Select value={selectedMonth} onValueChange={setSelectedMonth}>
-            <SelectTrigger className="w-40">
-              <SelectValue placeholder="월 선택" />
+            <SelectTrigger className="w-20 md:w-40 h-8 md:h-10 text-xs md:text-sm">
+              <SelectValue placeholder="월" />
             </SelectTrigger>
             <SelectContent>
               {months.map(month => (

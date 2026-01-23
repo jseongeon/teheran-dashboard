@@ -45,39 +45,39 @@ function RevenueCard({
 
   return (
     <Card>
-      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-        <CardTitle className="text-sm font-medium">총 매출</CardTitle>
+      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 p-3 md:p-6 md:pb-2">
+        <CardTitle className="text-xs md:text-sm font-medium">총 매출</CardTitle>
         {isUnlocked ? (
-          <Unlock className="h-4 w-4 text-green-500" />
+          <Unlock className="h-3 w-3 md:h-4 md:w-4 text-green-500" />
         ) : (
-          <Lock className="h-4 w-4 text-muted-foreground" />
+          <Lock className="h-3 w-3 md:h-4 md:w-4 text-muted-foreground" />
         )}
       </CardHeader>
-      <CardContent>
+      <CardContent className="p-3 pt-0 md:p-6 md:pt-0">
         {isUnlocked ? (
           <>
-            <div className="text-2xl font-bold">
+            <div className="text-lg md:text-2xl font-bold">
               ₩{revenue.toLocaleString()}
             </div>
-            <p className="text-xs text-muted-foreground">
+            <p className="text-[10px] md:text-xs text-muted-foreground">
               {label}
             </p>
           </>
         ) : (
           <div className="space-y-2">
-            <p className="text-sm text-muted-foreground">
-              매출 확인 시 암호가 필요합니다
+            <p className="text-xs md:text-sm text-muted-foreground">
+              암호 필요
             </p>
-            <div className="flex gap-2">
+            <div className="flex gap-1 md:gap-2">
               <Input
                 type="password"
-                placeholder="암호 입력"
+                placeholder="암호"
                 value={password}
                 onChange={(e) => onPasswordChange(e.target.value)}
                 onKeyDown={handleKeyDown}
-                className="h-8 text-sm"
+                className="h-7 md:h-8 text-xs md:text-sm"
               />
-              <Button size="sm" onClick={onUnlock} className="h-8">
+              <Button size="sm" onClick={onUnlock} className="h-7 md:h-8 text-xs px-2 md:px-3">
                 확인
               </Button>
             </div>
@@ -363,20 +363,21 @@ export function DetailedMetricsPage({ subPage, inquiries, contracts, isDarkMode 
     switch (activeTab) {
       case "월 실적":
         return (
-          <div className="space-y-6">
+          <div className="space-y-4 md:space-y-6">
             <Card>
-              <CardHeader>
-                <CardTitle>연도 선택</CardTitle>
-                <CardDescription>조회할 연도를 선택하세요</CardDescription>
+              <CardHeader className="p-3 md:p-6">
+                <CardTitle className="text-base md:text-lg">연도 선택</CardTitle>
+                <CardDescription className="text-xs md:text-sm">조회할 연도를 선택하세요</CardDescription>
               </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-6 gap-2">
+              <CardContent className="p-3 pt-0 md:p-6 md:pt-0">
+                <div className="grid grid-cols-3 sm:grid-cols-6 gap-2">
                   {availableYears.map((year) => (
                     <Button
                       key={year}
                       variant={selectedYear === year ? "default" : "outline"}
                       onClick={() => setSelectedYear(year)}
-                      className="w-full"
+                      className="w-full text-xs md:text-sm"
+                      size="sm"
                     >
                       {year}년
                     </Button>
@@ -386,18 +387,19 @@ export function DetailedMetricsPage({ subPage, inquiries, contracts, isDarkMode 
             </Card>
 
             <Card>
-              <CardHeader>
-                <CardTitle>월 선택</CardTitle>
-                <CardDescription>조회할 월을 선택하세요</CardDescription>
+              <CardHeader className="p-3 md:p-6">
+                <CardTitle className="text-base md:text-lg">월 선택</CardTitle>
+                <CardDescription className="text-xs md:text-sm">조회할 월을 선택하세요</CardDescription>
               </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-6 gap-2">
+              <CardContent className="p-3 pt-0 md:p-6 md:pt-0">
+                <div className="grid grid-cols-4 sm:grid-cols-6 gap-1.5 md:gap-2">
                   {months.map((month) => (
                     <Button
                       key={month}
                       variant={selectedMonth === month ? "default" : "outline"}
                       onClick={() => setSelectedMonth(month)}
-                      className="w-full"
+                      className="w-full text-xs md:text-sm"
+                      size="sm"
                     >
                       {month}월
                     </Button>
@@ -406,42 +408,42 @@ export function DetailedMetricsPage({ subPage, inquiries, contracts, isDarkMode 
               </CardContent>
             </Card>
 
-            <div className="grid gap-4 md:grid-cols-4">
+            <div className="grid gap-3 md:gap-4 grid-cols-2 lg:grid-cols-4">
               <Card>
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium">총 문의건</CardTitle>
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 p-3 md:p-6 md:pb-2">
+                  <CardTitle className="text-xs md:text-sm font-medium">총 문의건</CardTitle>
                 </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold">{selectedMonthStats.totalInquiries.toLocaleString()}</div>
-                  <p className="text-xs text-muted-foreground">
+                <CardContent className="p-3 pt-0 md:p-6 md:pt-0">
+                  <div className="text-xl md:text-2xl font-bold">{selectedMonthStats.totalInquiries.toLocaleString()}</div>
+                  <p className="text-[10px] md:text-xs text-muted-foreground">
                     {selectedMonth}월
                   </p>
                 </CardContent>
               </Card>
 
               <Card>
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium">총 수임건</CardTitle>
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 p-3 md:p-6 md:pb-2">
+                  <CardTitle className="text-xs md:text-sm font-medium">총 수임건</CardTitle>
                 </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold">{selectedMonthStats.totalContracts.toLocaleString()}</div>
-                  <p className="text-xs text-muted-foreground">
+                <CardContent className="p-3 pt-0 md:p-6 md:pt-0">
+                  <div className="text-xl md:text-2xl font-bold">{selectedMonthStats.totalContracts.toLocaleString()}</div>
+                  <p className="text-[10px] md:text-xs text-muted-foreground">
                     {selectedMonth}월
                   </p>
                 </CardContent>
               </Card>
 
               <Card>
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium">수임율</CardTitle>
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 p-3 md:p-6 md:pb-2">
+                  <CardTitle className="text-xs md:text-sm font-medium">수임율</CardTitle>
                 </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold">
-                    {selectedMonthStats.totalInquiries > 0 
+                <CardContent className="p-3 pt-0 md:p-6 md:pt-0">
+                  <div className="text-xl md:text-2xl font-bold">
+                    {selectedMonthStats.totalInquiries > 0
                       ? ((selectedMonthStats.totalContracts / selectedMonthStats.totalInquiries) * 100).toFixed(1)
                       : "0.0"}%
                   </div>
-                  <p className="text-xs text-muted-foreground">
+                  <p className="text-[10px] md:text-xs text-muted-foreground">
                     월 수임율
                   </p>
                 </CardContent>
@@ -458,18 +460,18 @@ export function DetailedMetricsPage({ subPage, inquiries, contracts, isDarkMode 
             </div>
 
             <Card>
-              <CardHeader>
-                <CardTitle>월별 일별 추이</CardTitle>
-                <CardDescription>문의건 및 수임건 일별 변화</CardDescription>
+              <CardHeader className="p-3 md:p-6">
+                <CardTitle className="text-base md:text-lg">월별 일별 추이</CardTitle>
+                <CardDescription className="text-xs md:text-sm">문의건 및 수임건 일별 변화</CardDescription>
               </CardHeader>
-              <CardContent>
-                <ResponsiveContainer width="100%" height={400}>
+              <CardContent className="p-3 pt-0 md:p-6 md:pt-0">
+                <ResponsiveContainer width="100%" height={280} className="md:!h-[400px]">
                   <LineChart data={selectedMonthStats.chartData}>
                     <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="date" />
-                    <YAxis />
+                    <XAxis dataKey="date" tick={{ fontSize: 10 }} />
+                    <YAxis tick={{ fontSize: 10 }} />
                     <Tooltip />
-                    <Legend />
+                    <Legend wrapperStyle={{ fontSize: '12px' }} />
                     <Line type="monotone" dataKey="inquiries" stroke="#3b82f6" name="문의건" strokeWidth={2} />
                     <Line type="monotone" dataKey="contracts" stroke="#10b981" name="수임건" strokeWidth={2} />
                   </LineChart>
@@ -481,20 +483,21 @@ export function DetailedMetricsPage({ subPage, inquiries, contracts, isDarkMode 
 
       case "분기 실적":
         return (
-          <div className="space-y-6">
+          <div className="space-y-4 md:space-y-6">
             <Card>
-              <CardHeader>
-                <CardTitle>연도 선택</CardTitle>
-                <CardDescription>조회할 연도를 선택하세요</CardDescription>
+              <CardHeader className="p-3 md:p-6">
+                <CardTitle className="text-base md:text-lg">연도 선택</CardTitle>
+                <CardDescription className="text-xs md:text-sm">조회할 연도를 선택하세요</CardDescription>
               </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-6 gap-2">
+              <CardContent className="p-3 pt-0 md:p-6 md:pt-0">
+                <div className="grid grid-cols-3 sm:grid-cols-6 gap-2">
                   {availableYears.map((year) => (
                     <Button
                       key={year}
                       variant={selectedYear === year ? "default" : "outline"}
                       onClick={() => setSelectedYear(year)}
-                      className="w-full"
+                      className="w-full text-xs md:text-sm"
+                      size="sm"
                     >
                       {year}년
                     </Button>
@@ -504,18 +507,19 @@ export function DetailedMetricsPage({ subPage, inquiries, contracts, isDarkMode 
             </Card>
 
             <Card>
-              <CardHeader>
-                <CardTitle>분기 선택</CardTitle>
-                <CardDescription>조회할 분기를 선택하세요</CardDescription>
+              <CardHeader className="p-3 md:p-6">
+                <CardTitle className="text-base md:text-lg">분기 선택</CardTitle>
+                <CardDescription className="text-xs md:text-sm">조회할 분기를 선택하세요</CardDescription>
               </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-4 gap-2">
+              <CardContent className="p-3 pt-0 md:p-6 md:pt-0">
+                <div className="grid grid-cols-4 gap-1.5 md:gap-2">
                   {quarters.map((quarter) => (
                     <Button
                       key={quarter}
                       variant={selectedQuarter === quarter ? "default" : "outline"}
                       onClick={() => setSelectedQuarter(quarter)}
-                      className="w-full"
+                      className="w-full text-xs md:text-sm"
+                      size="sm"
                     >
                       {quarter}분기
                     </Button>
@@ -524,38 +528,38 @@ export function DetailedMetricsPage({ subPage, inquiries, contracts, isDarkMode 
               </CardContent>
             </Card>
 
-            <div className="grid gap-4 md:grid-cols-4">
+            <div className="grid gap-3 md:gap-4 grid-cols-2 lg:grid-cols-4">
               <Card>
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium">총 문의건</CardTitle>
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 p-3 md:p-6 md:pb-2">
+                  <CardTitle className="text-xs md:text-sm font-medium">총 문의건</CardTitle>
                 </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold">{selectedQuarterStats.totalInquiries.toLocaleString()}</div>
-                  <p className="text-xs text-muted-foreground">
-                    {selectedQuarterStats.quarterName} 총 문의
+                <CardContent className="p-3 pt-0 md:p-6 md:pt-0">
+                  <div className="text-xl md:text-2xl font-bold">{selectedQuarterStats.totalInquiries.toLocaleString()}</div>
+                  <p className="text-[10px] md:text-xs text-muted-foreground">
+                    {selectedQuarterStats.quarterName}
                   </p>
                 </CardContent>
               </Card>
 
               <Card>
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium">총 수임건</CardTitle>
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 p-3 md:p-6 md:pb-2">
+                  <CardTitle className="text-xs md:text-sm font-medium">총 수임건</CardTitle>
                 </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold">{selectedQuarterStats.totalContracts.toLocaleString()}</div>
-                  <p className="text-xs text-muted-foreground">
-                    {selectedQuarterStats.quarterName} 총 수임
+                <CardContent className="p-3 pt-0 md:p-6 md:pt-0">
+                  <div className="text-xl md:text-2xl font-bold">{selectedQuarterStats.totalContracts.toLocaleString()}</div>
+                  <p className="text-[10px] md:text-xs text-muted-foreground">
+                    {selectedQuarterStats.quarterName}
                   </p>
                 </CardContent>
               </Card>
 
               <Card>
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium">평균 수임율</CardTitle>
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 p-3 md:p-6 md:pb-2">
+                  <CardTitle className="text-xs md:text-sm font-medium">평균 수임율</CardTitle>
                 </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold">{selectedQuarterStats.avgRate.toFixed(1)}%</div>
-                  <p className="text-xs text-muted-foreground">
+                <CardContent className="p-3 pt-0 md:p-6 md:pt-0">
+                  <div className="text-xl md:text-2xl font-bold">{selectedQuarterStats.avgRate.toFixed(1)}%</div>
+                  <p className="text-[10px] md:text-xs text-muted-foreground">
                     분기 평균
                   </p>
                 </CardContent>
@@ -572,19 +576,19 @@ export function DetailedMetricsPage({ subPage, inquiries, contracts, isDarkMode 
             </div>
 
             <Card>
-              <CardHeader>
-                <CardTitle>{selectedQuarterStats.quarterName} 월별 실적</CardTitle>
-                <CardDescription>월별 비교</CardDescription>
+              <CardHeader className="p-3 md:p-6">
+                <CardTitle className="text-base md:text-lg">{selectedQuarterStats.quarterName} 월별 실적</CardTitle>
+                <CardDescription className="text-xs md:text-sm">월별 비교</CardDescription>
               </CardHeader>
-              <CardContent>
-                <ResponsiveContainer width="100%" height={400}>
+              <CardContent className="p-3 pt-0 md:p-6 md:pt-0">
+                <ResponsiveContainer width="100%" height={280} className="md:!h-[400px]">
                   <BarChart data={selectedQuarterStats.monthlyData}>
                     <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="month" />
-                    <YAxis yAxisId="left" />
-                    <YAxis yAxisId="right" orientation="right" />
+                    <XAxis dataKey="month" tick={{ fontSize: 10 }} />
+                    <YAxis yAxisId="left" tick={{ fontSize: 10 }} />
+                    <YAxis yAxisId="right" orientation="right" tick={{ fontSize: 10 }} />
                     <Tooltip />
-                    <Legend />
+                    <Legend wrapperStyle={{ fontSize: '12px' }} />
                     <Bar yAxisId="left" dataKey="inquiries" fill="#3b82f6" name="문의건" />
                     <Bar yAxisId="left" dataKey="contracts" fill="#10b981" name="수임건" />
                   </BarChart>
@@ -596,20 +600,21 @@ export function DetailedMetricsPage({ subPage, inquiries, contracts, isDarkMode 
 
       case "연 실적":
         return (
-          <div className="space-y-6">
+          <div className="space-y-4 md:space-y-6">
             <Card>
-              <CardHeader>
-                <CardTitle>연도 선택</CardTitle>
-                <CardDescription>조회할 연도를 선택하세요</CardDescription>
+              <CardHeader className="p-3 md:p-6">
+                <CardTitle className="text-base md:text-lg">연도 선택</CardTitle>
+                <CardDescription className="text-xs md:text-sm">조회할 연도를 선택하세요</CardDescription>
               </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-6 gap-2">
+              <CardContent className="p-3 pt-0 md:p-6 md:pt-0">
+                <div className="grid grid-cols-3 sm:grid-cols-6 gap-2">
                   {availableYears.map((year) => (
                     <Button
                       key={year}
                       variant={selectedYear === year ? "default" : "outline"}
                       onClick={() => setSelectedYear(year)}
-                      className="w-full"
+                      className="w-full text-xs md:text-sm"
+                      size="sm"
                     >
                       {year}년
                     </Button>
@@ -619,41 +624,41 @@ export function DetailedMetricsPage({ subPage, inquiries, contracts, isDarkMode 
             </Card>
 
             <div className="flex items-center gap-4">
-              <div className="text-lg font-semibold">{yearlyStats.year}년 전체 실적</div>
+              <div className="text-base md:text-lg font-semibold">{yearlyStats.year}년 전체 실적</div>
             </div>
 
-            <div className="grid gap-4 md:grid-cols-4">
+            <div className="grid gap-3 md:gap-4 grid-cols-2 lg:grid-cols-4">
               <Card>
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium">총 문의건</CardTitle>
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 p-3 md:p-6 md:pb-2">
+                  <CardTitle className="text-xs md:text-sm font-medium">총 문의건</CardTitle>
                 </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold">{yearlyStats.totalInquiries.toLocaleString()}</div>
-                  <p className="text-xs text-muted-foreground">
-                    {yearlyStats.year}년 총 문의
+                <CardContent className="p-3 pt-0 md:p-6 md:pt-0">
+                  <div className="text-xl md:text-2xl font-bold">{yearlyStats.totalInquiries.toLocaleString()}</div>
+                  <p className="text-[10px] md:text-xs text-muted-foreground">
+                    {yearlyStats.year}년
                   </p>
                 </CardContent>
               </Card>
 
               <Card>
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium">총 수임건</CardTitle>
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 p-3 md:p-6 md:pb-2">
+                  <CardTitle className="text-xs md:text-sm font-medium">총 수임건</CardTitle>
                 </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold">{yearlyStats.totalContracts.toLocaleString()}</div>
-                  <p className="text-xs text-muted-foreground">
-                    {yearlyStats.year}년 총 수임
+                <CardContent className="p-3 pt-0 md:p-6 md:pt-0">
+                  <div className="text-xl md:text-2xl font-bold">{yearlyStats.totalContracts.toLocaleString()}</div>
+                  <p className="text-[10px] md:text-xs text-muted-foreground">
+                    {yearlyStats.year}년
                   </p>
                 </CardContent>
               </Card>
 
               <Card>
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium">평균 수임율</CardTitle>
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 p-3 md:p-6 md:pb-2">
+                  <CardTitle className="text-xs md:text-sm font-medium">평균 수임율</CardTitle>
                 </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold">{yearlyStats.avgRate.toFixed(1)}%</div>
-                  <p className="text-xs text-muted-foreground">
+                <CardContent className="p-3 pt-0 md:p-6 md:pt-0">
+                  <div className="text-xl md:text-2xl font-bold">{yearlyStats.avgRate.toFixed(1)}%</div>
+                  <p className="text-[10px] md:text-xs text-muted-foreground">
                     연 평균
                   </p>
                 </CardContent>
@@ -670,19 +675,19 @@ export function DetailedMetricsPage({ subPage, inquiries, contracts, isDarkMode 
             </div>
 
             <Card>
-              <CardHeader>
-                <CardTitle>월별 실적</CardTitle>
-                <CardDescription>전체 월별 비교</CardDescription>
+              <CardHeader className="p-3 md:p-6">
+                <CardTitle className="text-base md:text-lg">월별 실적</CardTitle>
+                <CardDescription className="text-xs md:text-sm">전체 월별 비교</CardDescription>
               </CardHeader>
-              <CardContent>
-                <ResponsiveContainer width="100%" height={400}>
+              <CardContent className="p-3 pt-0 md:p-6 md:pt-0">
+                <ResponsiveContainer width="100%" height={280} className="md:!h-[400px]">
                   <BarChart data={yearlyStats.monthlyData}>
                     <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="month" />
-                    <YAxis yAxisId="left" />
-                    <YAxis yAxisId="right" orientation="right" />
+                    <XAxis dataKey="month" tick={{ fontSize: 10 }} />
+                    <YAxis yAxisId="left" tick={{ fontSize: 10 }} />
+                    <YAxis yAxisId="right" orientation="right" tick={{ fontSize: 10 }} />
                     <Tooltip />
-                    <Legend />
+                    <Legend wrapperStyle={{ fontSize: '12px' }} />
                     <Bar yAxisId="left" dataKey="inquiries" fill="#3b82f6" name="문의건" />
                     <Bar yAxisId="left" dataKey="contracts" fill="#10b981" name="수임건" />
                   </BarChart>
@@ -691,19 +696,19 @@ export function DetailedMetricsPage({ subPage, inquiries, contracts, isDarkMode 
             </Card>
 
             <Card>
-              <CardHeader>
-                <CardTitle>분기별 실적</CardTitle>
-                <CardDescription>전체 분기별 비교</CardDescription>
+              <CardHeader className="p-3 md:p-6">
+                <CardTitle className="text-base md:text-lg">분기별 실적</CardTitle>
+                <CardDescription className="text-xs md:text-sm">전체 분기별 비교</CardDescription>
               </CardHeader>
-              <CardContent>
-                <ResponsiveContainer width="100%" height={400}>
+              <CardContent className="p-3 pt-0 md:p-6 md:pt-0">
+                <ResponsiveContainer width="100%" height={280} className="md:!h-[400px]">
                   <BarChart data={yearlyStats.quarterlyData}>
                     <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="quarter" />
-                    <YAxis yAxisId="left" />
-                    <YAxis yAxisId="right" orientation="right" />
+                    <XAxis dataKey="quarter" tick={{ fontSize: 10 }} />
+                    <YAxis yAxisId="left" tick={{ fontSize: 10 }} />
+                    <YAxis yAxisId="right" orientation="right" tick={{ fontSize: 10 }} />
                     <Tooltip />
-                    <Legend />
+                    <Legend wrapperStyle={{ fontSize: '12px' }} />
                     <Bar yAxisId="left" dataKey="inquiries" fill="#3b82f6" name="문의건" />
                     <Bar yAxisId="left" dataKey="contracts" fill="#10b981" name="수임건" />
                   </BarChart>
@@ -719,20 +724,22 @@ export function DetailedMetricsPage({ subPage, inquiries, contracts, isDarkMode 
   }
 
   return (
-    <div className="flex-1 space-y-6 p-6">
+    <div className="flex-1 space-y-4 md:space-y-6 p-3 md:p-6">
       <div>
-        <h1 className="text-3xl font-bold tracking-tight">세부 지표</h1>
-        <p className="text-muted-foreground">
+        <h1 className="text-2xl md:text-3xl font-bold tracking-tight">세부 지표</h1>
+        <p className="text-sm md:text-base text-muted-foreground">
           월별, 분기별, 연별 상세 실적을 확인하세요
         </p>
       </div>
 
-      <div className="flex gap-2">
+      <div className="flex gap-2 flex-wrap">
         {metricTypes.map((type) => (
           <Button
             key={type}
             variant={activeTab === type ? "default" : "outline"}
             onClick={() => setActiveTab(type)}
+            size="sm"
+            className="text-xs md:text-sm"
           >
             {type}
           </Button>
