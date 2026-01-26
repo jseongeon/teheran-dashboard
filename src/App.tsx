@@ -25,7 +25,7 @@ export interface PageState {
 // 인증 정보 (실제 프로덕션에서는 백엔드에서 관리해야 합니다)
 const CREDENTIALS = {
   username: "admin",
-  password: "wjdtjddjs"
+  password: "wjdtjddjs123"
 }
 
 export default function App() {
